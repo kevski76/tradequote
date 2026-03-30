@@ -1,0 +1,195 @@
+<svg width="900" height="1100" viewBox="0 0 900 1100" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+  <defs>
+
+    <!-- Clip region = phone screen area only -->
+    <clipPath id="screen">
+      <rect x="274" y="78" width="320" height="680" rx="38"/>
+    </clipPath>
+
+    <!-- Send-button left-to-right gradient -->
+    <linearGradient id="send-btn" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#00684e"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+
+    <!-- Phone drop-shadow -->
+    <filter id="phone-shadow" x="-12%" y="-4%" width="132%" height="122%">
+      <feDropShadow dx="0" dy="20" stdDeviation="24"
+                    flood-color="#0F172A" flood-opacity="0.22"/>
+    </filter>
+
+    <!-- Subtle card lift (used inside clip group — output also clipped) -->
+    <filter id="card-sh" x="-20%" y="-30%" width="160%" height="200%">
+      <feDropShadow dx="0" dy="3" stdDeviation="6"
+                    flood-color="#0F172A" flood-opacity="0.07"/>
+    </filter>
+
+  </defs>
+
+  <!-- ══════════════════════════════════
+       BACKGROUND
+  ══════════════════════════════════ -->
+  <rect width="900" height="1100" rx="72" fill="#EFF7F2"/>
+  <circle cx="730" cy="185" r="185" fill="#C8EFD9" opacity="0.55"/>
+  <circle cx="140" cy="970" r="220" fill="#D4EBE0" opacity="0.55"/>
+
+  <!-- ══════════════════════════════════
+       PHONE BODY (centred: translate +16 px)
+  ══════════════════════════════════ -->
+  <g transform="translate(16, 0)">
+  <g filter="url(#phone-shadow)">
+    <rect x="258" y="58"  width="352" height="718" rx="48" fill="#0F172A"/>
+    <rect x="274" y="78"  width="320" height="680" rx="38" fill="#F8FAFC"/>
+    <rect x="411" y="70"  width="46"  height="10"  rx="5"  fill="#1a2540"/>
+    <rect x="396" y="742" width="76"  height="6"   rx="3"
+          fill="#1F2937" fill-opacity="0.15"/>
+  </g>
+
+  <!-- Hardware buttons -->
+  <rect x="255" y="196" width="6" height="46" rx="3" fill="#1a2540"/>
+  <rect x="255" y="256" width="6" height="46" rx="3" fill="#1a2540"/>
+  <rect x="610" y="218" width="6" height="66" rx="3" fill="#1a2540"/>
+
+  <!-- ══════════════════════════════════
+       PHONE SCREEN UI
+       Screen rect: x=274..594  y=78..758  (320×680 px)
+       Content padding 12 px each side →
+         left x=286, right x=582, width=296 px
+       All text + elements measured to fit within these bounds.
+  ══════════════════════════════════ -->
+  <g clip-path="url(#screen)">
+
+    <!-- STATUS BAR  y 78–102 -->
+    <rect x="274" y="78" width="320" height="24" fill="#053D2D"/>
+    <text x="288" y="94"
+          fill="white" fill-opacity="0.65"
+          font-family="Inter,Arial,sans-serif"
+          font-size="10" font-weight="600">9:41</text>
+    <rect x="546" y="87" width="3" height="8"  rx="1" fill="white" fill-opacity="0.40"/>
+    <rect x="552" y="85" width="3" height="10" rx="1" fill="white" fill-opacity="0.65"/>
+    <rect x="558" y="83" width="3" height="12" rx="1" fill="white"/>
+    <path d="M567 95 Q572 89 577 95" stroke="white" stroke-opacity="0.45" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <path d="M564 92 Q572 83 580 92" stroke="white" stroke-opacity="0.75" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <circle cx="572" cy="96" r="1.5" fill="white"/>
+    <rect x="585" y="86" width="21" height="12" rx="2.5" fill="none" stroke="white" stroke-opacity="0.65" stroke-width="1.2"/>
+    <rect x="606" y="89" width="3"  height="6"  rx="1" fill="white" fill-opacity="0.55"/>
+    <rect x="587" y="88" width="15" height="8"  rx="1.5" fill="white" fill-opacity="0.7"/>
+
+    <!-- APP HEADER  y 102–192 -->
+    <rect x="274" y="102" width="320" height="90" fill="#065F46"/>
+    <path d="M290 134 L282 143 L290 152"
+          stroke="#6EE7B7" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <!-- "NEW QUOTE" 11 px × 9 chars ≈ 59 px wide — starts x=306, ends ≈365 -->
+    <text x="306" y="135"
+          fill="#6EE7B7"
+          font-family="Inter,Arial,sans-serif"
+          font-size="11" font-weight="700" letter-spacing="0.9">NEW QUOTE</text>
+    <!-- "Garden fencing" 19 px × 14 chars ≈ 150 px — starts x=306, ends ≈456 -->
+    <text x="306" y="167"
+          fill="#FFFFFF"
+          font-family="Inter,Arial,sans-serif"
+          font-size="19" font-weight="800">Garden fencing</text>
+    <circle cx="574" cy="137" r="2.2" fill="#6EE7B7" fill-opacity="0.75"/>
+    <circle cx="574" cy="145" r="2.2" fill="#6EE7B7" fill-opacity="0.75"/>
+    <circle cx="574" cy="153" r="2.2" fill="#6EE7B7" fill-opacity="0.75"/>
+
+    <!-- CONTENT BACKGROUND  y 192–758 -->
+    <rect x="274" y="192" width="320" height="566" fill="#F1F5F9"/>
+
+    <!-- MEASUREMENTS CARD  y 204–302 (h=98) -->
+    <g filter="url(#card-sh)">
+      <rect x="286" y="204" width="296" height="98" rx="16" fill="#FFFFFF"/>
+    </g>
+    <rect x="298" y="218" width="30" height="30" rx="10" fill="#DCFCE7"/>
+    <path d="M305 233 L320 233 M305 229 L320 229 M305 237 L313 237"
+          stroke="#059669" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+    <text x="338" y="232"
+          fill="#065F46"
+          font-family="Inter,Arial,sans-serif"
+          font-size="12" font-weight="700">Measurements</text>
+    <!-- 12 px text — both lines start x=298, well within 582 right edge -->
+    <text x="298" y="260"
+          fill="#64748B"
+          font-family="Inter,Arial,sans-serif"
+          font-size="12">14 panels x 1.8 m</text>
+    <text x="298" y="278"
+          fill="#64748B"
+          font-family="Inter,Arial,sans-serif"
+          font-size="12">2 concrete posts</text>
+
+    <!-- STAT CARDS  y 314–408 (h=94) -->
+    <!-- Left: Materials  x=286, w=141, right edge=427 -->
+    <g filter="url(#card-sh)">
+      <rect x="286" y="314" width="141" height="94" rx="16" fill="#FFFFFF"/>
+    </g>
+    <text x="300" y="337"
+          fill="#94A3B8"
+          font-family="Inter,Arial,sans-serif"
+          font-size="10" font-weight="700" letter-spacing="0.5">MATERIALS</text>
+    <!-- "£1,420" 20 px × 6 chars ≈ 66 px — ends ≈366, fits in 427 -->
+    <text x="300" y="366"
+          fill="#0F172A"
+          font-family="Inter,Arial,sans-serif"
+          font-size="20" font-weight="800">£1,420</text>
+    <rect x="300" y="376" width="38" height="4" rx="2" fill="#DCFCE7"/>
+
+    <!-- Right: Labour  x=437, w=145, right edge=582 -->
+    <g filter="url(#card-sh)">
+      <rect x="437" y="314" width="145" height="94" rx="16" fill="#FFFFFF"/>
+    </g>
+    <text x="451" y="337"
+          fill="#94A3B8"
+          font-family="Inter,Arial,sans-serif"
+          font-size="10" font-weight="700" letter-spacing="0.5">LABOUR</text>
+    <!-- "£780" 20 px × 4 chars ≈ 44 px — ends ≈495, fits in 582 -->
+    <text x="451" y="366"
+          fill="#0F172A"
+          font-family="Inter,Arial,sans-serif"
+          font-size="20" font-weight="800">£780</text>
+    <rect x="451" y="376" width="38" height="4" rx="2" fill="#DCFCE7"/>
+
+    <!-- TOTAL CARD  y 420–496 (h=76) -->
+    <g filter="url(#card-sh)">
+      <rect x="286" y="420" width="296" height="76" rx="16" fill="#065F46"/>
+    </g>
+    <text x="300" y="444"
+          fill="#6EE7B7"
+          font-family="Inter,Arial,sans-serif"
+          font-size="10" font-weight="700" letter-spacing="0.9">TOTAL</text>
+    <!-- "£2,200" 26 px × 6 chars ≈ 86 px — ends ≈386, well within 582 -->
+    <text x="300" y="479"
+          fill="#FFFFFF"
+          font-family="Inter,Arial,sans-serif"
+          font-size="26" font-weight="800">£2,200</text>
+    <path d="M554 455 L562 447 L562 455" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M546 463 L554 455 L562 447" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+    <!-- PROFIT ROW  y 508–532 -->
+    <text x="286" y="516"
+          fill="#64748B"
+          font-family="Inter,Arial,sans-serif"
+          font-size="11">Profit margin</text>
+    <!-- right-aligned at x=582 (content right edge) -->
+    <text x="582" y="516"
+          fill="#10B981"
+          font-family="Inter,Arial,sans-serif"
+          font-size="11" font-weight="700"
+          text-anchor="end">23%</text>
+    <rect x="286" y="522" width="296" height="8" rx="4" fill="#E2E8F0"/>
+    <rect x="286" y="522" width="202" height="8" rx="4" fill="#10B981"/>
+
+    <!-- SEND BUTTON  y 542–594 -->
+    <rect x="286" y="542" width="296" height="52" rx="26" fill="url(#send-btn)"/>
+    <!-- centered at x=434 (= 286 + 296/2) — "Send Quote ->" ~126 px at 14 px -->
+    <text x="434" y="574"
+          fill="white"
+          font-family="Inter,Arial,sans-serif"
+          font-size="14" font-weight="700"
+          text-anchor="middle">Send Quote  -&gt;</text>
+
+  </g><!-- /clip -->
+  </g><!-- /phone centre group -->
+
+</svg>

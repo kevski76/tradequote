@@ -11,36 +11,83 @@
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&amp;display=swap" nonce="">
-        <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=Inter+Tight:wght@300;500;600&amp;display=swap" nonce="">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Text:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;display=block" nonce="">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Inter+Tight:wght@300;500;600&amp;display=swap" nonce="">
 
         <!-- Styles -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <style>
+            body { font-family: 'Inter', sans-serif; }
+            [x-cloak] { display: none !important; }
+            .bg-emerald-gradient {
+                background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            }
+            .reveal {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.6s ease-out;
+            }
+            .reveal.active {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        </style>
     </head>
     <body class="min-h-screen bg-[#f4f7f9] text-[#2b2f31] font-sans selection:bg-emerald-100 selection:text-emerald-900">
         {{-- Navigation --}}
         <nav class="fixed top-0 w-full z-50 px-6 py-4">
-            <div class="max-w-5xl mx-auto bg-white/80 backdrop-blur-md shadow-xl shadow-emerald-900/5 flex justify-between items-center px-6 py-3 rounded-full border border-white/20">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up text-white w-5 h-5" aria-hidden="true">
-                            <path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path>
-                        </svg>
+            <div id="welcome-nav-shell" class="max-w-5xl mx-auto bg-white/80 backdrop-blur-md shadow-xl shadow-emerald-900/5 px-4 sm:px-6 py-3 rounded-4xl border border-white/20">
+                <div class="flex justify-between items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up text-white w-5 h-5" aria-hidden="true">
+                                <path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path>
+                            </svg>
+                        </div>
+                        <span class="text-xl font-bold tracking-tight text-slate-900">QuoteFlow</span>
                     </div>
-                    <span class="text-xl font-bold tracking-tight text-slate-900">QuoteFlow</span>
-                </div>
                 
-                <div class="hidden md:flex gap-8 items-center">
-                    <a href="#" class="text-sm font-bold text-emerald-600 border-b-2 border-emerald-500 pb-0.5">Features</a>
-                    <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">How it Works</a>
-                    <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">Pricing</a>
+                    <div class="hidden md:flex gap-8 items-center">
+                        <a href="#" class="text-sm font-bold text-emerald-600 border-b-2 border-emerald-500 pb-0.5">Features</a>
+                        <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">How it Works</a>
+                        <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">Pricing</a>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <button class="hidden md:block bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white px-5 py-2 rounded-full text-sm font-bold hover:scale-[1.02] transition-transform active:scale-95 shadow-lg shadow-emerald-900/10">
+                            Get Early Access
+                        </button>
+                        <button
+                            id="welcome-mobile-menu-toggle"
+                            type="button"
+                            class="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-colors hover:border-emerald-200 hover:text-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            aria-expanded="false"
+                            aria-controls="welcome-mobile-menu"
+                            aria-label="Open navigation menu"
+                        >
+                            <svg id="welcome-mobile-menu-open-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5" aria-hidden="true">
+                                <line x1="4" x2="20" y1="12" y2="12"></line>
+                                <line x1="4" x2="20" y1="6" y2="6"></line>
+                                <line x1="4" x2="20" y1="18" y2="18"></line>
+                            </svg>
+                            <svg id="welcome-mobile-menu-close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden h-5 w-5" aria-hidden="true">
+                                <path d="M18 6 6 18"></path>
+                                <path d="m6 6 12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="flex items-center gap-4">
-                    <button class="hidden sm:block bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white px-5 py-2 rounded-full text-sm font-bold hover:scale-[1.02] transition-transform active:scale-95 shadow-lg shadow-emerald-900/10">
-                        Get Early Access
-                    </button>
+                <div id="welcome-mobile-menu" class="hidden md:hidden pt-4">
+                    <div class="rounded-3xl border border-emerald-100 bg-white px-5 py-5 shadow-lg shadow-emerald-900/5">
+                        <div class="flex flex-col gap-4">
+                            <a href="#" class="text-sm font-bold text-emerald-600" data-mobile-nav-link>Features</a>
+                            <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors" data-mobile-nav-link>How it Works</a>
+                            <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors" data-mobile-nav-link>Pricing</a>
+                        </div>
+                        <button class="mt-5 w-full bg-linear-to-r from-[#00684e] to-[#74f3c6] text-white px-5 py-3 rounded-full text-sm font-bold shadow-lg shadow-emerald-900/10">
+                            Get Early Access
+                        </button>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -57,7 +104,13 @@
                         Create and send a professional quote in under 60 seconds — straight from your phone.
                     </p>
                     <div class="flex flex-wrap gap-4 pt-4">
-                        <button class="bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-emerald-900/20 hover:scale-[1.02] transition-all hover:shadow-emerald-900/30">Watch 30-sec demo<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-play w-5 h-5" aria-hidden="true"><path d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z"></path><circle cx="12" cy="12" r="10"></circle></svg></button>
+                        <button class="bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-emerald-900/20 
+                        hover:scale-[1.02] transition-all hover:shadow-emerald-900/30">
+                            Watch 30-sec demo<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-play w-5 h-5" aria-hidden="true">
+                                <path d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z"></path>
+                                <circle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                        </button>
                         <button class="bg-white text-slate-800 px-8 py-4 rounded-xl font-bold hover:bg-slate-50 transition-all border border-slate-200">
                             Get early access (free)
                         </button>
@@ -66,17 +119,36 @@
                 
                 <div class="relative">
                     <div class="absolute -inset-4 bg-emerald-500/10 blur-3xl rounded-full"></div>
-                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
-                        <img src="https://picsum.photos/seed/quotes/800/1000" alt="App Interface" class="w-full h-auto">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-[#e8f6f0]">
+                        <img id="app-interface" src="{{ asset('images/hero-phone-quote.svg') }}" alt="Hand holding a mobile phone displaying a quote interface" class="w-full h-auto">
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="py-24 bg-slate-100/50"><div class="max-w-7xl mx-auto px-6 text-center"><div style="opacity: 1; transform: none;"><h2 class="text-4xl font-bold mb-4">See it in action</h2><p class="text-slate-600 text-lg max-w-2xl mx-auto mb-16">No forms. No paperwork. Just enter the job and send the quote.</p></div><div class="relative max-w-4xl mx-auto rounded-[2rem] overflow-hidden bg-slate-900 shadow-2xl aspect-video group cursor-pointer" style="opacity: 1; transform: none;"><img alt="Dashboard" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" referrerpolicy="no-referrer" src="https://picsum.photos/seed/dashboard/1200/800"><div class="absolute inset-0 flex items-center justify-center"><div class="w-20 h-20 bg-[#00684e] rounded-full flex items-center justify-center text-white shadow-xl" tabindex="0" style="transform: none;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-play w-10 h-10 fill-current" aria-hidden="true"><path d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z"></path><circle cx="12" cy="12" r="10"></circle></svg></div></div></div></div></section>
+        <section class="py-24 bg-[#edf0f5] reveal">
+            <div class="max-w-7xl mx-auto px-6 text-center">
+                <div style="opacity: 1; transform: none;">
+                    <h2 class="text-4xl font-bold mb-4">See it in action</h2>
+                    <p class="text-slate-600 text-lg max-w-2xl mx-auto mb-16">No forms. No paperwork. Just enter the job and send the quote.</p>
+                </div>
+                <div class="relative max-w-4xl mx-auto rounded-[2rem] overflow-hidden bg-slate-900 shadow-2xl aspect-video group cursor-pointer" style="opacity: 1; transform: none;">
+                    <img alt="Dashboard" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" referrerpolicy="no-referrer" src="{{ url('/') }}/images/homepage-video-placeholder.png">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-20 h-20 bg-[#00684e] rounded-full flex items-center justify-center text-white shadow-xl" tabindex="0" style="transform: none;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-play w-10 h-10 fill-current" aria-hidden="true">
+                                    <path d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z"></path>
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         {{-- Problem Section --}}
-        <section class="py-28 bg-[#0b0f10] text-white overflow-hidden">
+        <section class="py-28 bg-[#0b0f10] text-white overflow-hidden reveal">
             <div class="max-w-7xl mx-auto px-6">
                 <div class="grid lg:grid-cols-2 gap-20 items-center">
                     <div class="space-y-12">
@@ -92,8 +164,8 @@
                                 ['id' => '04', 'text' => 'Customer goes with someone faster', 'highlight' => true],
                             ] as $item)
                                 <div class="flex items-center gap-6 p-6 rounded-2xl bg-white/5 border border-white/10 {{ isset($item['highlight']) ? 'border-red-400/30 bg-red-400/5' : '' }}">
-                                    <span class="text-3xl font-bold {{ isset($item['highlight']) ? 'text-red-400' : 'text-slate-500' }}">{{ $item['id'] }}</span>
-                                    <p class="text-lg {{ isset($item['highlight']) ? 'font-bold' : '' }}">{{ $item['text'] }}</p>
+                                    <span class="text-3xl font-bold {{ isset($item['highlight']) ? 'text-red-400' : 'text-slate-400' }}">{{ $item['id'] }}</span>
+                                    <p class="text-lg {{ isset($item['highlight']) ? 'font-bold' : 'text-slate-400' }}">{{ $item['text'] }}</p>
                                 </div>
                             @endforeach
                         </div>
@@ -101,14 +173,14 @@
                     </div>
                     
                     <div class="hidden lg:block">
-                        <img src="https://picsum.photos/seed/worker/800/1000?grayscale" alt="Exhausted worker" class="rounded-3xl opacity-60">
+                        <img src="{{ url('/') }}/images/exhausted-worker.jpg" alt="Exhausted worker" class="rounded-3xl opacity-60">
                     </div>
                 </div>
             </div>
         </section>
 
         {{-- Solution Section --}}
-        <section class="py-28">
+        <section class="py-28 reveal">
             <div class="max-w-7xl mx-auto px-6">
                 <div class="text-center mb-20">
                     <h2 class="text-5xl font-extrabold tracking-tight mb-6" style="opacity: 1; transform: none;">Quote it there and then</h2>
@@ -160,12 +232,74 @@
                 <p class="text-center mt-16 text-2xl font-extrabold text-[#00684e]" style="opacity: 1; transform: none;">Done in under a minute.</p>
             </div>
         </section>
-        <section class="py-32 bg-[#00684e] relative overflow-hidden"><div class="max-w-7xl mx-auto px-6 text-center relative z-10" style="opacity: 1; transform: none;"><h2 class="text-4xl md:text-7xl font-black text-white tracking-tighter uppercase leading-none">One extra job a month <br class="hidden md:block"> pays for this</h2></div><div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none"><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white rounded-full blur-[120px]"></div></div></section>    
+        <section class="py-32 bg-[#00684e] relative overflow-hidden reveal">
+            <div class="max-w-7xl mx-auto px-6 text-center relative z-10" style="opacity: 1; transform: none;">
+                <h2 class="text-4xl md:text-7xl font-black text-white tracking-tighter uppercase leading-none">
+                    One extra job a month <br class="hidden md:block"> pays for this
+                </h2>
+            </div>
+            <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white rounded-full blur-[120px]"></div>
+            </div>
+        </section>   
+
         {{-- Early Access Section --}}
-        <section class="py-28"><div class="max-w-7xl mx-auto px-6"><div class="grid lg:grid-cols-2 gap-12"><div class="space-y-8"><h2 class="text-4xl font-bold" style="opacity: 1; transform: none;">Built with local trades</h2><p class="text-xl text-slate-600 leading-relaxed" style="opacity: 1; transform: none;">I’m working with a small group of landscapers &amp; fencing contractors to get this right before launch. This isn't corporate software — it's built by the people who use it.</p><div class="flex items-center gap-4 p-4 bg-slate-100 rounded-2xl" style="opacity: 1; transform: none;"><div class="flex -space-x-3"><img alt="User" class="w-10 h-10 rounded-full border-2 border-white" referrerpolicy="no-referrer" src="https://i.pravatar.cc/100?img=11"><img alt="User" class="w-10 h-10 rounded-full border-2 border-white" referrerpolicy="no-referrer" src="https://i.pravatar.cc/100?img=12"><img alt="User" class="w-10 h-10 rounded-full border-2 border-white" referrerpolicy="no-referrer" src="https://i.pravatar.cc/100?img=13"></div><p class="text-sm font-bold text-slate-500 uppercase tracking-widest">JOIN 120+ TRADES ALREADY TESTING</p></div></div><div class="bg-white p-8 md:p-12 rounded-[2rem] shadow-2xl relative overflow-hidden" style="opacity: 1; transform: none;"><div class="absolute top-0 right-0 p-4 opacity-10"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-pen w-32 h-32 rotate-12 text-[#00684e]" aria-hidden="true"><path d="M12.5 22H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v9.5"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M13.378 15.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"></path></svg></div><form class="space-y-6 relative z-10"><div class="grid md:grid-cols-2 gap-6"><div class="space-y-2"><label class="text-xs font-bold uppercase tracking-widest text-slate-500">Name</label><input class="w-full bg-slate-50 border-none rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" placeholder="John Doe" type="text"></div><div class="space-y-2"><label class="text-xs font-bold uppercase tracking-widest text-slate-500">Trade</label><input class="w-full bg-slate-50 border-none rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" placeholder="e.g. Landscaper" type="text"></div></div><div class="space-y-2"><label class="text-xs font-bold uppercase tracking-widest text-slate-500">Email</label><input class="w-full bg-slate-50 border-none rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" placeholder="john@example.com" type="email"></div><div class="space-y-2"><label class="text-xs font-bold uppercase tracking-widest text-slate-500">How do you currently quote jobs?</label><textarea class="w-full bg-slate-50 border-none rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" placeholder="Paper, Excel, or mental math..." rows="3"></textarea></div><button class="w-full bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white py-5 rounded-xl font-bold text-lg shadow-xl hover:scale-[1.01] active:scale-95 transition-all">Get early access</button></form></div></div></div></section>
+        <section class="py-28 reveal">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <div class="space-y-8">
+                        <h2 class="text-4xl font-bold" style="opacity: 1; transform: none;">Built with local trades</h2>
+                        <p class="text-xl text-slate-600 leading-relaxed" style="opacity: 1; transform: none;">
+                            I’m working with a small group of landscapers &amp; fencing contractors to get this right before launch. 
+                            This isn't corporate software — it's built by the people who use it.
+                        </p>
+                        <div class="flex items-center gap-4 p-4 bg-slate-100 rounded-2xl" style="opacity: 1; transform: none;">
+                            <div class="flex -space-x-3">
+                                <img alt="User" class="w-10 h-10 rounded-full border-2 border-white" referrerpolicy="no-referrer" src="https://i.pravatar.cc/100?img=11">
+                                <img alt="User" class="w-10 h-10 rounded-full border-2 border-white" referrerpolicy="no-referrer" src="https://i.pravatar.cc/100?img=12">
+                                <img alt="User" class="w-10 h-10 rounded-full border-2 border-white" referrerpolicy="no-referrer" src="https://i.pravatar.cc/100?img=13">
+                            </div>
+                            <p class="text-sm font-bold text-slate-500 uppercase tracking-widest">JOIN 120+ TRADES ALREADY TESTING</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 md:p-12 rounded-[2rem] shadow-2xl relative overflow-hidden" style="opacity: 1; transform: none;">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-pen w-32 h-32 rotate-12 text-[#00684e]" aria-hidden="true">
+                                <path d="M12.5 22H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v9.5"></path>
+                                <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                                <path d="M13.378 15.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"></path>
+                            </svg>
+                        </div>
+                        <form class="space-y-6 relative z-10">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label class="text-xs font-bold uppercase tracking-widest text-slate-500">Name</label>
+                                    <input class="w-full bg-slate-50 border-none rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" placeholder="John Doe" type="text">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-xs font-bold uppercase tracking-widest text-slate-500">Trade</label>
+                                    <input class="w-full bg-slate-50 border-none rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" placeholder="e.g. Landscaper" type="text">
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase tracking-widest text-slate-500">Email</label>
+                                <input class="w-full bg-slate-50 border-none rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" placeholder="john@example.com" type="email">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase tracking-widest text-slate-500">How do you currently quote jobs?</label>
+                                <textarea class="w-full bg-slate-50 border-none rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" placeholder="Paper, Excel, or mental math..." rows="3"></textarea>
+                            </div>
+                            <button class="w-full bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white py-5 rounded-xl font-bold text-lg shadow-xl hover:scale-[1.01] active:scale-95 transition-all">
+                                Get early access
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         {{-- Footer --}}
-        <footer class="bg-slate-50 pt-20 pb-12 px-8 border-t border-slate-200">
+        <footer class="bg-slate-50 py-8 px-8 border-t border-slate-200">
             <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
                 <div class="text-lg font-bold text-emerald-900">QuoteFlow</div>
                 <div class="text-xs font-bold uppercase tracking-widest text-slate-400">
@@ -173,5 +307,73 @@
                 </div>
             </div>
         </footer>
+        <script>
+            // Simple scroll reveal logic
+            document.addEventListener('DOMContentLoaded', () => {
+                const navShell = document.getElementById('welcome-nav-shell');
+                const mobileMenu = document.getElementById('welcome-mobile-menu');
+                const mobileMenuToggle = document.getElementById('welcome-mobile-menu-toggle');
+                const mobileMenuOpenIcon = document.getElementById('welcome-mobile-menu-open-icon');
+                const mobileMenuCloseIcon = document.getElementById('welcome-mobile-menu-close-icon');
+
+                const setMobileMenuState = (isOpen) => {
+                    if (!mobileMenu || !mobileMenuToggle || !mobileMenuOpenIcon || !mobileMenuCloseIcon) {
+                        return;
+                    }
+
+                    mobileMenu.classList.toggle('hidden', !isOpen);
+                    mobileMenuOpenIcon.classList.toggle('hidden', isOpen);
+                    mobileMenuCloseIcon.classList.toggle('hidden', !isOpen);
+                    mobileMenuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                    mobileMenuToggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+                };
+
+                if (mobileMenuToggle) {
+                    mobileMenuToggle.addEventListener('click', () => {
+                        const isOpen = mobileMenuToggle.getAttribute('aria-expanded') === 'true';
+                        setMobileMenuState(!isOpen);
+                    });
+                }
+
+                document.querySelectorAll('[data-mobile-nav-link]').forEach((link) => {
+                    link.addEventListener('click', () => setMobileMenuState(false));
+                });
+
+                document.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape') {
+                        setMobileMenuState(false);
+                    }
+                });
+
+                document.addEventListener('click', (event) => {
+                    if (!navShell || mobileMenu?.classList.contains('hidden')) {
+                        return;
+                    }
+
+                    if (!navShell.contains(event.target)) {
+                        setMobileMenuState(false);
+                    }
+                });
+
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth >= 768) {
+                        setMobileMenuState(false);
+                    }
+                });
+
+                const observerOptions = {
+                    threshold: 0.1
+                };
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                        }
+                    });
+                }, observerOptions);
+
+                document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            });
+        </script>
     </body>
 </html>

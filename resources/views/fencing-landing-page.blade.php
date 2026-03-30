@@ -32,48 +32,63 @@
             transform: translateY(0);
         }
     </style>
-
-    <script>
-        // Simple scroll reveal logic
-        document.addEventListener('DOMContentLoaded', () => {
-            const observerOptions = {
-                threshold: 0.1
-            };
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-        });
-    </script>
 </head>
 <body class="min-h-screen bg-[#f4f7f9] text-[#2b2f31] font-sans selection:bg-emerald-100 selection:text-emerald-900" x-data="{ scrolled: false, mobileMenu: false }" @scroll.window="scrolled = (window.pageYOffset > 20)">
     {{-- Navigation --}}
     <nav class="fixed top-0 w-full z-50 px-6 py-4">
-        <div class="max-w-5xl mx-auto bg-white/80 backdrop-blur-md shadow-xl shadow-emerald-900/5 flex justify-between items-center px-6 py-3 rounded-full border border-white/20">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up text-white w-5 h-5" aria-hidden="true">
-                        <path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path>
-                    </svg>
+        <div id="welcome-nav-shell" class="max-w-5xl mx-auto bg-white/80 backdrop-blur-md shadow-xl shadow-emerald-900/5 px-4 sm:px-6 py-3 rounded-4xl border border-white/20">
+            <div class="flex justify-between items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up text-white w-5 h-5" aria-hidden="true">
+                            <path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-slate-900">QuoteFlow</span>
                 </div>
-                <span class="text-xl font-bold tracking-tight text-slate-900">QuoteFlow</span>
-            </div>
             
-            <div class="hidden md:flex gap-8 items-center">
-                <a href="#" class="text-sm font-bold text-emerald-600 border-b-2 border-emerald-500 pb-0.5">Features</a>
-                <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">How it Works</a>
-                <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">Pricing</a>
+                <div class="hidden md:flex gap-8 items-center">
+                    <a href="#" class="text-sm font-bold text-emerald-600 border-b-2 border-emerald-500 pb-0.5">Features</a>
+                    <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">How it Works</a>
+                    <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">Pricing</a>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button class="hidden md:block bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white px-5 py-2 rounded-full text-sm font-bold hover:scale-[1.02] transition-transform active:scale-95 shadow-lg shadow-emerald-900/10">
+                        Get Early Access
+                    </button>
+                    <button
+                        id="welcome-mobile-menu-toggle"
+                        type="button"
+                        class="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-colors hover:border-emerald-200 hover:text-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        aria-expanded="false"
+                        aria-controls="welcome-mobile-menu"
+                        aria-label="Open navigation menu"
+                    >
+                        <svg id="welcome-mobile-menu-open-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5" aria-hidden="true">
+                            <line x1="4" x2="20" y1="12" y2="12"></line>
+                            <line x1="4" x2="20" y1="6" y2="6"></line>
+                            <line x1="4" x2="20" y1="18" y2="18"></line>
+                        </svg>
+                        <svg id="welcome-mobile-menu-close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden h-5 w-5" aria-hidden="true">
+                            <path d="M18 6 6 18"></path>
+                            <path d="m6 6 12 12"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
 
-            <div class="flex items-center gap-4">
-                <button class="hidden sm:block bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white px-5 py-2 rounded-full text-sm font-bold hover:scale-[1.02] transition-transform active:scale-95 shadow-lg shadow-emerald-900/10">
-                    Get Early Access
-                </button>
+            <div id="welcome-mobile-menu" class="hidden md:hidden pt-4">
+                <div class="rounded-3xl border border-emerald-100 bg-white px-5 py-5 shadow-lg shadow-emerald-900/5">
+                    <div class="flex flex-col gap-4">
+                        <a href="#" class="text-sm font-bold text-emerald-600" data-mobile-nav-link>Features</a>
+                        <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors" data-mobile-nav-link>How it Works</a>
+                        <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors" data-mobile-nav-link>Pricing</a>
+                    </div>
+                    <button class="mt-5 w-full bg-linear-to-r from-[#00684e] to-[#74f3c6] text-white px-5 py-3 rounded-full text-sm font-bold shadow-lg shadow-emerald-900/10">
+                        Get Early Access
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
@@ -83,7 +98,7 @@
         <section class="max-w-7xl mx-auto px-6">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div class="max-w-2xl">
-                    <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 leading-[1.1] mb-8">
+                    <h1 class="text-5xl md:text-7xl font-black tracking-tighter leading-[0.95] mb-8">
                         Quote fencing jobs before you leave the <span class="text-emerald-600">driveway</span>
                     </h1>
                     <p class="text-xl text-slate-600 leading-relaxed mb-10 max-w-lg">
@@ -91,9 +106,12 @@
                     </p>
                     
                     <div class="flex flex-col sm:flex-row gap-4 mb-12">
-                        <button class="flex items-center justify-center gap-2 bg-emerald-500 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 transition-all active:scale-95">
-                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            Watch 30-sec demo
+                        <button class="bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-emerald-900/20 
+                        hover:scale-[1.02] transition-all hover:shadow-emerald-900/30">
+                            Watch 30-sec demo<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-play w-5 h-5" aria-hidden="true">
+                                <path d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z"></path>
+                                <circle cx="12" cy="12" r="10"></circle>
+                            </svg>
                         </button>
                         <button class="bg-slate-100 text-slate-900 px-8 py-4 rounded-xl font-bold text-lg transition-all hover:bg-slate-200 active:scale-95">
                             Get early access (free)
@@ -116,7 +134,7 @@
                     <div class="absolute -inset-4 bg-emerald-100 rounded-[3rem] blur-3xl opacity-50 -z-10"></div>
                     <div class="bg-slate-900 p-4 rounded-[3rem] shadow-2xl max-w-sm mx-auto lg:ml-auto transform rotate-2 hover:rotate-0 transition-transform duration-500">
                         <div class="bg-white rounded-[2.5rem] overflow-hidden aspect-[9/19] relative border-4 border-slate-900">
-                            <img src="https://picsum.photos/seed/app-preview/400/800" alt="App Preview" class="w-full h-full object-cover opacity-90">
+                            <img src="{{ url('/') }}/images/mobile-phone-quote.jpg" alt="App Preview" class="w-full h-full object-cover opacity-90">
                             <div class="absolute inset-x-0 bottom-0 bg-white p-6 pt-10">
                                 <div class="w-12 h-1.5 bg-emerald-100 rounded-full mb-4"></div>
                                 <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest mb-1">New Quote</p>
@@ -229,7 +247,7 @@
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
                     <div class="group">
                         <div class="relative h-64 rounded-3xl overflow-hidden mb-8">
-                            <img src="https://picsum.photos/seed/fence1/400/600" alt="Measure" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <img src="{{ url('/') }}/images/tape-measure-1.jpg" alt="Measure" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                         </div>
                         <div class="flex gap-4">
@@ -242,7 +260,7 @@
                     </div>
                     <div class="group">
                         <div class="relative h-64 rounded-3xl overflow-hidden mb-8">
-                            <img src="https://picsum.photos/seed/fence2/400/600" alt="Extras" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <img src="{{ url('/') }}/images/fence-gate.jpg" alt="Extras" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                         </div>
                         <div class="flex gap-4">
@@ -255,7 +273,7 @@
                     </div>
                     <div class="group">
                         <div class="relative h-64 rounded-3xl overflow-hidden mb-8">
-                            <img src="https://picsum.photos/seed/calc/400/600" alt="Price" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <img src="{{ url('/') }}/images/calculator.jpg" alt="Price" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                         </div>
                         <div class="flex gap-4">
@@ -268,7 +286,7 @@
                     </div>
                     <div class="group">
                         <div class="relative h-64 rounded-3xl overflow-hidden mb-8">
-                            <img src="https://picsum.photos/seed/phone/400/600" alt="Send" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <img src="{{ url('/') }}/images/send-on-the-spot.jpg" alt="Send" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                         </div>
                         <div class="flex gap-4">
@@ -344,8 +362,8 @@
                                 <label class="text-sm font-bold text-slate-700">How do you currently quote? (Optional)</label>
                                 <textarea rows="3" placeholder="Pen and paper, Excel, etc..." class="w-full bg-slate-50 border-none rounded-xl px-4 py-4 focus:ring-2 focus:ring-emerald-500 transition-all outline-none resize-none"></textarea>
                             </div>
-                            <button class="w-full bg-emerald-500 text-white py-5 rounded-xl font-bold text-lg shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 transition-all active:scale-95">
-                                Get early access (free)
+                            <button class="w-full bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white py-5 rounded-xl font-bold text-lg shadow-xl hover:scale-[1.01] active:scale-95 transition-all">
+                                Get early access
                             </button>
                             <p class="text-center text-xs text-slate-400">
                                 Limited to 5 new spots this week. No credit card required.
@@ -395,6 +413,73 @@
             </div>
         </div>
     </footer>
+    <script>
+        // Simple scroll reveal logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const navShell = document.getElementById('welcome-nav-shell');
+            const mobileMenu = document.getElementById('welcome-mobile-menu');
+            const mobileMenuToggle = document.getElementById('welcome-mobile-menu-toggle');
+            const mobileMenuOpenIcon = document.getElementById('welcome-mobile-menu-open-icon');
+            const mobileMenuCloseIcon = document.getElementById('welcome-mobile-menu-close-icon');
 
+            const setMobileMenuState = (isOpen) => {
+                if (!mobileMenu || !mobileMenuToggle || !mobileMenuOpenIcon || !mobileMenuCloseIcon) {
+                    return;
+                }
+
+                mobileMenu.classList.toggle('hidden', !isOpen);
+                mobileMenuOpenIcon.classList.toggle('hidden', isOpen);
+                mobileMenuCloseIcon.classList.toggle('hidden', !isOpen);
+                mobileMenuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                mobileMenuToggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+            };
+
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    const isOpen = mobileMenuToggle.getAttribute('aria-expanded') === 'true';
+                    setMobileMenuState(!isOpen);
+                });
+            }
+
+            document.querySelectorAll('[data-mobile-nav-link]').forEach((link) => {
+                link.addEventListener('click', () => setMobileMenuState(false));
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    setMobileMenuState(false);
+                }
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!navShell || mobileMenu?.classList.contains('hidden')) {
+                    return;
+                }
+
+                if (!navShell.contains(event.target)) {
+                    setMobileMenuState(false);
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 768) {
+                    setMobileMenuState(false);
+                }
+            });
+
+            const observerOptions = {
+                threshold: 0.1
+            };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        });
+    </script>
 </body>
 </html>
