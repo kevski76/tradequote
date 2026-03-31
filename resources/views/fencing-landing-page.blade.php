@@ -54,7 +54,7 @@
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <button class="hidden md:block bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white px-5 py-2 rounded-full text-sm font-bold hover:scale-[1.02] transition-transform active:scale-95 shadow-lg shadow-emerald-900/10">
+                    <button onclick="scrollToForm()" class="hidden md:block bg-gradient-to-r from-[#00684e] to-[#74f3c6] cursor-pointer text-white px-5 py-2 rounded-full text-sm font-bold hover:scale-[1.02] transition-transform active:scale-95 shadow-lg shadow-emerald-900/10">
                         Get Early Access
                     </button>
                     <button
@@ -85,7 +85,7 @@
                         <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors" data-mobile-nav-link>How it Works</a>
                         <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors" data-mobile-nav-link>Pricing</a>
                     </div>
-                    <button class="mt-5 w-full bg-linear-to-r from-[#00684e] to-[#74f3c6] text-white px-5 py-3 rounded-full text-sm font-bold shadow-lg shadow-emerald-900/10">
+                    <button onclick="scrollToForm()" class="mt-5 w-full bg-linear-to-r from-[#00684e] to-[#74f3c6] cursor-pointer text-white px-5 py-3 rounded-full text-sm font-bold shadow-lg shadow-emerald-900/10">
                         Get Early Access
                     </button>
                 </div>
@@ -106,18 +106,17 @@
                     </p>
                     
                     <div class="flex flex-col sm:flex-row gap-4 mb-12">
-                        <button class="bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-emerald-900/20 
+                        <button onclick="scrollToForm()" class="bg-gradient-to-r from-[#00684e] to-[#74f3c6] cursor-pointer text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-emerald-900/20 
                         hover:scale-[1.02] transition-all hover:shadow-emerald-900/30">
-                            Watch 30-sec demo<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-play w-5 h-5" aria-hidden="true">
-                                <path d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z"></path>
-                                <circle cx="12" cy="12" r="10"></circle>
-                            </svg>
-                        </button>
-                        <button class="bg-slate-100 text-slate-900 px-8 py-4 rounded-xl font-bold text-lg transition-all hover:bg-slate-200 active:scale-95">
                             Get early access (free)
                         </button>
+                        <!--
+                        <button class="bg-slate-100 text-slate-900 px-8 py-4 rounded-xl font-bold text-lg transition-all hover:bg-slate-200 active:scale-95">
+                            Get early access (free)
+                        </button> 
+                        -->
                     </div>
-
+                    <!--
                     <div class="flex items-center gap-4">
                         <div class="flex -space-x-3">
                             <img src="https://picsum.photos/seed/u1/100/100" class="w-10 h-10 rounded-full border-2 border-white object-cover" alt="User">
@@ -127,7 +126,8 @@
                         <p class="text-sm font-medium text-slate-500">
                             Trusted by <span class="text-slate-900 font-bold">50+</span> local fencing pros
                         </p>
-                    </div>
+                    </div> 
+                    -->
                 </div>
 
                 <div class="relative">
@@ -333,16 +333,18 @@
                         <p class="text-lg text-slate-600 leading-relaxed">
                             I'm working with a small group of fencing contractors to get this right before launch. This isn't a generic tool—it's built for the way you actually work.
                         </p>
+                        <!--
                         <div class="flex items-center gap-6 p-6 bg-white rounded-2xl shadow-sm">
                             <img src="https://picsum.photos/seed/james/100/100" alt="Founder" class="w-16 h-16 rounded-full object-cover">
                             <div>
                                 <p class="font-bold text-slate-900">Message from James</p>
                                 <p class="text-sm text-slate-500">Founder, QuoteFlow</p>
                             </div>
-                        </div>
+                        </div> 
+                        -->
                     </div>
 
-                    <div class="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl shadow-emerald-900/5">
+                    <div id="earlyAccessForm" class="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl shadow-emerald-900/5">
                         <form class="space-y-6" onsubmit="event.preventDefault(); alert('Thanks for your interest!');">
                             <div class="grid md:grid-cols-2 gap-6">
                                 <div class="space-y-2">
@@ -362,11 +364,11 @@
                                 <label class="text-sm font-bold text-slate-700">How do you currently quote? (Optional)</label>
                                 <textarea rows="3" placeholder="Pen and paper, Excel, etc..." class="w-full bg-slate-50 border-none rounded-xl px-4 py-4 focus:ring-2 focus:ring-emerald-500 transition-all outline-none resize-none"></textarea>
                             </div>
-                            <button class="w-full bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white py-5 rounded-xl font-bold text-lg shadow-xl hover:scale-[1.01] active:scale-95 transition-all">
+                            <button class="w-full bg-gradient-to-r from-[#00684e] to-[#74f3c6] cursor-pointer text-white py-5 rounded-xl font-bold text-lg shadow-xl hover:scale-[1.01] active:scale-95 transition-all">
                                 Get early access
                             </button>
                             <p class="text-center text-xs text-slate-400">
-                                Limited to 5 new spots this week. No credit card required.
+                                Limited to 5 spots, get in quick. No credit card required.
                             </p>
                         </form>
                     </div>
@@ -381,7 +383,7 @@
                 <h2 class="text-4xl md:text-6xl font-extrabold text-white mb-12 leading-tight">
                     Try it. Break it. Tell me what's missing.
                 </h2>
-                <button class="bg-emerald-400 text-emerald-950 px-12 py-6 rounded-full text-xl font-black shadow-2xl hover:bg-white transition-all active:scale-95">
+                <button onclick="scrollToForm()" class="bg-emerald-400 text-emerald-950 cursor-pointer px-12 py-6 rounded-full text-xl font-black shadow-2xl hover:bg-white transition-all active:scale-95">
                     Get Started
                 </button>
             </div>
@@ -408,12 +410,19 @@
                 </div>
                 
                 <p class="text-sm text-slate-400">
-                    © 2024 QuoteFlow. Built for Fencing Professionals.
+                    © {{ date('Y') }} QuoteFlow. Built for Fencing Professionals.
                 </p>
             </div>
         </div>
     </footer>
     <script>
+        function scrollToForm() {
+            const el = document.getElementById('earlyAccessForm');
+            const navHeight = document.querySelector('nav').offsetHeight;
+            const top = el.getBoundingClientRect().top + window.pageYOffset - navHeight - 24;
+            window.scrollTo({ top, behavior: 'smooth' });
+        }
+
         // Simple scroll reveal logic
         document.addEventListener('DOMContentLoaded', () => {
             const navShell = document.getElementById('welcome-nav-shell');
