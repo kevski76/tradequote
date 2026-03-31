@@ -60,7 +60,7 @@
                     <button
                         id="welcome-mobile-menu-toggle"
                         type="button"
-                        class="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-colors hover:border-emerald-200 hover:text-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        class="md:hidden inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-colors hover:border-emerald-200 hover:text-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         aria-expanded="false"
                         aria-controls="welcome-mobile-menu"
                         aria-label="Open navigation menu"
@@ -344,34 +344,7 @@
                         -->
                     </div>
 
-                    <div id="earlyAccessForm" class="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl shadow-emerald-900/5">
-                        <form class="space-y-6" onsubmit="event.preventDefault(); alert('Thanks for your interest!');">
-                            <div class="grid md:grid-cols-2 gap-6">
-                                <div class="space-y-2">
-                                    <label class="text-sm font-bold text-slate-700">Name</label>
-                                    <input type="text" placeholder="John Doe" class="w-full bg-slate-50 border-none rounded-xl px-4 py-4 focus:ring-2 focus:ring-emerald-500 transition-all outline-none">
-                                </div>
-                                <div class="space-y-2">
-                                    <label class="text-sm font-bold text-slate-700">Business name</label>
-                                    <input type="text" placeholder="JD Fencing Ltd" class="w-full bg-slate-50 border-none rounded-xl px-4 py-4 focus:ring-2 focus:ring-emerald-500 transition-all outline-none">
-                                </div>
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-sm font-bold text-slate-700">Email</label>
-                                <input type="email" placeholder="john@jdfencing.com" class="w-full bg-slate-50 border-none rounded-xl px-4 py-4 focus:ring-2 focus:ring-emerald-500 transition-all outline-none">
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-sm font-bold text-slate-700">How do you currently quote? (Optional)</label>
-                                <textarea rows="3" placeholder="Pen and paper, Excel, etc..." class="w-full bg-slate-50 border-none rounded-xl px-4 py-4 focus:ring-2 focus:ring-emerald-500 transition-all outline-none resize-none"></textarea>
-                            </div>
-                            <button class="w-full bg-gradient-to-r from-[#00684e] to-[#74f3c6] cursor-pointer text-white py-5 rounded-xl font-bold text-lg shadow-xl hover:scale-[1.01] active:scale-95 transition-all">
-                                Get early access
-                            </button>
-                            <p class="text-center text-xs text-slate-400">
-                                Limited to 5 spots, get in quick. No credit card required.
-                            </p>
-                        </form>
-                    </div>
+                    @livewire('early-access-registration')
                 </div>
             </div>
         </section>

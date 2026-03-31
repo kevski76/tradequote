@@ -19,10 +19,27 @@ class Quotes extends Model
         'created_by', // user who made quote
         'module_id', // panel | closeboard
         'variant_key',
+        'customer_name',
+        'job_name',
+        'status',
         'length',
         'labour_type',
         'labour_total',
         'materials_total',
+        'subtotal_price',
+        'vat_rate',
+        'vat_total',
+        'payment_terms',
+        'calculation_data',
+        'pdf_path',
+        'pdf_generated_at',
         'total_price'
+    ];
+
+    protected $casts = [
+        'length' => 'decimal:2',
+        'vat_rate' => 'decimal:2',
+        'calculation_data' => 'array',
+        'pdf_generated_at' => 'datetime',
     ];
 }

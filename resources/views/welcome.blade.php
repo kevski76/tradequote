@@ -32,7 +32,7 @@
             }
         </style>
     </head>
-    <body class="min-h-screen bg-[#f4f7f9] text-[#2b2f31] font-sans selection:bg-emerald-100 selection:text-emerald-900">
+    <body class="min-h-screen scroll-smooth bg-[#f4f7f9] text-[#2b2f31] font-sans selection:bg-emerald-100 selection:text-emerald-900">
         {{-- Navigation --}}
         <nav class="fixed top-0 w-full z-50 px-6 py-4">
             <div id="welcome-nav-shell" class="max-w-5xl mx-auto bg-white/80 backdrop-blur-md shadow-xl shadow-emerald-900/5 px-4 sm:px-6 py-3 rounded-4xl border border-white/20">
@@ -53,13 +53,13 @@
                     </div>
 
                     <div class="flex items-center gap-3">
-                        <button class="hidden md:block bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white px-5 py-2 rounded-full text-sm font-bold hover:scale-[1.02] transition-transform active:scale-95 shadow-lg shadow-emerald-900/10">
+                        <button onclick="scrollToForm()" class="hidden md:block bg-gradient-to-r cursor-pointer from-[#00684e] to-[#74f3c6] text-white px-5 py-2 rounded-full text-sm font-bold hover:scale-[1.02] transition-transform active:scale-95 shadow-lg shadow-emerald-900/10">
                             Get Early Access
                         </button>
                         <button
                             id="welcome-mobile-menu-toggle"
                             type="button"
-                            class="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-colors hover:border-emerald-200 hover:text-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            class="md:hidden inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-colors hover:border-emerald-200 hover:text-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                             aria-expanded="false"
                             aria-controls="welcome-mobile-menu"
                             aria-label="Open navigation menu"
@@ -84,7 +84,7 @@
                             <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors" data-mobile-nav-link>How it Works</a>
                             <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors" data-mobile-nav-link>Pricing</a>
                         </div>
-                        <button class="mt-5 w-full bg-linear-to-r from-[#00684e] to-[#74f3c6] text-white px-5 py-3 rounded-full text-sm font-bold shadow-lg shadow-emerald-900/10">
+                        <button onclick="scrollToForm()" class="mt-5 w-full bg-linear-to-r cursor-pointer from-[#00684e] to-[#74f3c6] cursor-pointer text-white px-5 py-3 rounded-full text-sm font-bold shadow-lg shadow-emerald-900/10">
                             Get Early Access
                         </button>
                     </div>
@@ -96,7 +96,14 @@
         <section class="pt-40 pb-20 px-6 max-w-7xl mx-auto overflow-hidden">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div class="space-y-8">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold tracking-widest uppercase"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles w-3 h-3" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>Beta Access Now Open</div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold tracking-widest uppercase">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles w-3 h-3" aria-hidden="true">
+                            <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path>
+                            <path d="M20 2v4"></path>
+                            <path d="M22 4h-4"></path>
+                            <circle cx="4" cy="20" r="2"></circle>
+                        </svg>Beta Access Now Open
+                    </div>
                     <h1 class="text-5xl md:text-7xl font-black tracking-tighter leading-[0.95]">
                         Win the job before you leave the <span class="text-[#00684e]">driveway</span>
                     </h1>
@@ -104,16 +111,15 @@
                         Create and send a professional quote in under 60 seconds — straight from your phone.
                     </p>
                     <div class="flex flex-wrap gap-4 pt-4">
-                        <button class="bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-emerald-900/20 
+                        <button onclick="scrollToForm()" class="bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-emerald-900/20 
                         hover:scale-[1.02] transition-all hover:shadow-emerald-900/30">
-                            Watch 30-sec demo<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-play w-5 h-5" aria-hidden="true">
-                                <path d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z"></path>
-                                <circle cx="12" cy="12" r="10"></circle>
-                            </svg>
-                        </button>
-                        <button class="bg-white text-slate-800 px-8 py-4 rounded-xl font-bold hover:bg-slate-50 transition-all border border-slate-200">
                             Get early access (free)
                         </button>
+                        <!--
+                        <button class="bg-white text-slate-800 px-8 py-4 rounded-xl font-bold hover:bg-slate-50 transition-all border border-slate-200">
+                            Get early access (free)
+                        </button> 
+                        -->
                     </div>
                 </div>
                 
@@ -125,7 +131,7 @@
                 </div>
             </div>
         </section>
-
+        <!--
         <section class="py-24 bg-[#edf0f5] reveal">
             <div class="max-w-7xl mx-auto px-6 text-center">
                 <div style="opacity: 1; transform: none;">
@@ -146,6 +152,7 @@
                 </div>
             </div>
         </section>
+        -->
 
         {{-- Problem Section --}}
         <section class="py-28 bg-[#0b0f10] text-white overflow-hidden reveal">
@@ -262,38 +269,7 @@
                             <p class="text-sm font-bold text-slate-500 uppercase tracking-widest">JOIN 120+ TRADES ALREADY TESTING</p>
                         </div>
                     </div>
-                    <div class="bg-white p-8 md:p-12 rounded-[2rem] shadow-2xl relative overflow-hidden" style="opacity: 1; transform: none;">
-                        <div class="absolute top-0 right-0 p-4 opacity-10">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-pen w-32 h-32 rotate-12 text-[#00684e]" aria-hidden="true">
-                                <path d="M12.5 22H18a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v9.5"></path>
-                                <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
-                                <path d="M13.378 15.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"></path>
-                            </svg>
-                        </div>
-                        <form class="space-y-6 relative z-10">
-                            <div class="grid md:grid-cols-2 gap-6">
-                                <div class="space-y-2">
-                                    <label class="text-xs font-bold uppercase tracking-widest text-slate-500">Name</label>
-                                    <input class="w-full bg-slate-50 border-none rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" placeholder="John Doe" type="text">
-                                </div>
-                                <div class="space-y-2">
-                                    <label class="text-xs font-bold uppercase tracking-widest text-slate-500">Trade</label>
-                                    <input class="w-full bg-slate-50 border-none rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" placeholder="e.g. Landscaper" type="text">
-                                </div>
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-xs font-bold uppercase tracking-widest text-slate-500">Email</label>
-                                <input class="w-full bg-slate-50 border-none rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" placeholder="john@example.com" type="email">
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-xs font-bold uppercase tracking-widest text-slate-500">How do you currently quote jobs?</label>
-                                <textarea class="w-full bg-slate-50 border-none rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all" placeholder="Paper, Excel, or mental math..." rows="3"></textarea>
-                            </div>
-                            <button class="w-full bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white py-5 rounded-xl font-bold text-lg shadow-xl hover:scale-[1.01] active:scale-95 transition-all">
-                                Get early access
-                            </button>
-                        </form>
-                    </div>
+                    @livewire('early-access-registration')
                 </div>
             </div>
         </section>
@@ -308,6 +284,13 @@
             </div>
         </footer>
         <script>
+            function scrollToForm() {
+                const el = document.getElementById('earlyAccessForm');
+                const navHeight = document.querySelector('nav').offsetHeight;
+                const top = el.getBoundingClientRect().top + window.pageYOffset - navHeight - 24;
+                window.scrollTo({ top, behavior: 'smooth' });
+            }
+
             // Simple scroll reveal logic
             document.addEventListener('DOMContentLoaded', () => {
                 const navShell = document.getElementById('welcome-nav-shell');
