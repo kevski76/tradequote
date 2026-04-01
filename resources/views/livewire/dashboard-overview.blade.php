@@ -15,7 +15,7 @@
             href="{{ route('quotes.create') }}"
             class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-8 py-4 text-base font-semibold text-white shadow-sm transition hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900"
         >
-            Create New Quote
+            Create New Quote 
         </a>
     </section>
 

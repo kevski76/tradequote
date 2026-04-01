@@ -2,18 +2,18 @@
 
 namespace App\Livewire;
 
-use App\Models\Modules;
-use App\Models\QuoteTemplates;
-use App\Models\Quotes;
 use App\Models\Organisations;
+use App\Models\Quotes;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Livewire\Component;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class CreateQuote extends Component
+class EditQuote extends Component
 {
+    public int $quoteId;
+
     public string $customerName = '';
 
     public string $jobName = '';
@@ -30,25 +30,31 @@ class CreateQuote extends Component
 
     public string $paymentTerms = '';
 
-    public string $whatsappPhone = '+44';
-
-    public string $whatsappMessage = '';
-
-    public function mount(): void
+    public function mount(int $quoteId): void
     {
-        $this->jobName = $this->defaultJobName();
+        $this->quoteId = $quoteId;
 
-        $templateId = request()->integer('template');
-        if ($templateId > 0) {
-            $this->loadTemplate($templateId);
-        }
-    }
+        $user = auth()->user();
+        $quote = Quotes::query()->findOrFail($quoteId);
 
-    public function updatedLength(): void
-    {
-        if ($this->jobName === '' || Str::startsWith($this->jobName, 'Fence job -')) {
-            $this->jobName = $this->defaultJobName();
+        $ownedByUser = (int) $quote->created_by === (int) $user->id;
+        $orgId = (int) ($user->organisation_id ?? 0);
+        $ownedByOrg = $orgId > 0 && (int) $quote->organisation_id === $orgId;
+
+        if (! $ownedByUser && ! $ownedByOrg) {
+            throw new AccessDeniedHttpException();
         }
+
+        $data = is_array($quote->calculation_data) ? $quote->calculation_data : [];
+
+        $this->customerName = (string) ($quote->customer_name ?? '');
+        $this->jobName = (string) ($quote->job_name ?? '');
+        $this->length = (string) ($data['length'] ?? $quote->length ?? $this->length);
+        $this->labourRate = (string) ($data['labour_rate'] ?? $this->labourRate);
+        $this->markup = (string) ($data['markup'] ?? $this->markup);
+        $this->waste = (string) ($data['waste'] ?? $this->waste);
+        $this->vatRate = (string) ($data['vat_rate'] ?? $quote->vat_rate ?? $this->vatRate);
+        $this->paymentTerms = (string) ($quote->payment_terms ?? '');
     }
 
     public function saveQuote(): void
@@ -58,103 +64,12 @@ class CreateQuote extends Component
         $user = auth()->user();
         $breakdown = $this->calculateBreakdown();
 
-        $quote = $this->createQuoteRecord($breakdown, (int) $user->id, (int) ($user->organisation_id ?? 0));
-        $pdfBytes = $this->renderPdfBytes($quote, $breakdown, (int) $user->id, (string) $user->email, (string) $user->name);
-        $this->persistQuotePdf($quote, $pdfBytes);
+        $quote = Quotes::query()->findOrFail($this->quoteId);
 
-        $this->dispatch('toast', message: 'Quote saved successfully. PDF snapshot attached.', type: 'success');
-    }
-
-    public function saveTemplate(): void
-    {
-        $this->validate($this->rules());
-
-        $user = auth()->user();
-        $breakdown = $this->calculateBreakdown();
-
-        $module = Modules::query()->firstOrCreate(
-            ['slug' => 'fencing'],
-            ['name' => 'Fencing']
-        );
-
-        QuoteTemplates::query()->create([
-            'organisation_id' => (int) ($user->organisation_id ?? 0),
-            'created_by' => (int) $user->id,
-            'name' => $this->jobName !== '' ? $this->jobName : $this->defaultJobName(),
-            'module_id' => (int) $module->id,
-            'variant_key' => 'fencing',
-            'data' => [
-                'customer_name' => $this->customerName,
-                'job_name' => $this->jobName,
-                'length' => $breakdown['length'],
-                'labour_rate' => $breakdown['labour_rate'],
-                'markup' => $breakdown['markup'],
-                'waste' => $breakdown['waste'],
-                'vat_rate' => $breakdown['vat_rate'],
-                'payment_terms' => $this->paymentTerms,
-            ],
-        ]);
-
-        $this->dispatch('toast', message: 'Template saved successfully.', type: 'success');
-    }
-
-    public function prepareWhatsApp(): void
-    {
-        $this->validate($this->rules());
-
-        $user = auth()->user();
-        $breakdown = $this->calculateBreakdown();
-        $quote = $this->createQuoteRecord($breakdown, (int) $user->id, (int) ($user->organisation_id ?? 0));
-
-        $customerName = trim($this->customerName) !== '' ? trim($this->customerName) : 'there';
-        $total = '£'.number_format($breakdown['total_price'], 2);
-        $quoteLink = route('quote.public', ['uuid' => $quote->uuid]);
-
-        $this->whatsappMessage = "Hi {$customerName},\n\nHere's your quote for the fencing work:\n\nTotal: {$total}\n\nYou can view the full breakdown here:\n{$quoteLink}\n\nLet me know if you'd like to go ahead 👍";
-
-        $this->dispatch('open-whatsapp-modal');
-    }
-
-    public function downloadPdf()
-    {        $this->validate($this->rules());
-
-        $user = auth()->user();
-        $breakdown = $this->calculateBreakdown();
-        $quote = $this->createQuoteRecord($breakdown, (int) $user->id, (int) ($user->organisation_id ?? 0));
-        $pdfBytes = $this->renderPdfBytes($quote, $breakdown, (int) $user->id, (string) $user->email, (string) $user->name);
-        $this->persistQuotePdf($quote, $pdfBytes);
-
-        $fileName = 'tradepulse-quote-'.$quote->id.'.pdf';
-
-        return response()->streamDownload(function () use ($pdfBytes): void {
-            echo $pdfBytes;
-        }, $fileName, ['Content-Type' => 'application/pdf']);
-    }
-
-    public function render(): \Illuminate\View\View
-    {
-        return view('livewire.create-quote', [
-            'breakdown' => $this->calculateBreakdown(),
-        ]);
-    }
-
-    private function createQuoteRecord(array $breakdown, int $userId, int $organisationId): Quotes
-    {
-        $module = Modules::query()->firstOrCreate(
-            ['slug' => 'fencing'],
-            ['name' => 'Fencing']
-        );
-
-        return Quotes::query()->create([
-            'organisation_id' => $organisationId,
-            'created_by' => $userId,
-            'module_id' => (int) $module->id,
-            'variant_key' => Str::slug($this->jobName !== '' ? $this->jobName : $this->defaultJobName()),
+        $quote->forceFill([
             'customer_name' => $this->customerName !== '' ? $this->customerName : null,
             'job_name' => $this->jobName !== '' ? $this->jobName : $this->defaultJobName(),
-            'status' => 'draft',
             'length' => $breakdown['length'],
-            'labour_type' => 'per_metre',
             'labour_total' => (int) round($breakdown['labour_cost']),
             'materials_total' => (int) round($breakdown['materials_cost']),
             'subtotal_price' => (int) round($breakdown['subtotal']),
@@ -163,6 +78,35 @@ class CreateQuote extends Component
             'payment_terms' => trim($this->paymentTerms) !== '' ? trim($this->paymentTerms) : null,
             'calculation_data' => $breakdown,
             'total_price' => (int) round($breakdown['total_price']),
+        ])->save();
+
+        $pdfBytes = $this->renderPdfBytes($quote, $breakdown, (int) $user->id, (string) $user->email, (string) $user->name);
+        $this->persistQuotePdf($quote, $pdfBytes);
+
+        $this->dispatch('toast', message: 'Quote updated successfully. PDF snapshot regenerated.', type: 'success');
+    }
+
+    public function downloadPdf(): void
+    {
+        $this->validate($this->rules());
+
+        $user = auth()->user();
+        $breakdown = $this->calculateBreakdown();
+
+        $quote = Quotes::query()->findOrFail($this->quoteId);
+        $pdfBytes = $this->renderPdfBytes($quote, $breakdown, (int) $user->id, (string) $user->email, (string) $user->name);
+
+        $fileName = 'tradepulse-quote-'.$quote->id.'.pdf';
+
+        response()->streamDownload(function () use ($pdfBytes): void {
+            echo $pdfBytes;
+        }, $fileName, ['Content-Type' => 'application/pdf'])->send();
+    }
+
+    public function render(): \Illuminate\View\View
+    {
+        return view('livewire.edit-quote', [
+            'breakdown' => $this->calculateBreakdown(),
         ]);
     }
 
@@ -242,35 +186,6 @@ class CreateQuote extends Component
         $dompdf->render();
 
         return $dompdf->output();
-    }
-
-    private function loadTemplate(int $templateId): void
-    {
-        $user = auth()->user();
-
-        $template = QuoteTemplates::query()
-            ->whereKey($templateId)
-            ->where('created_by', (int) $user->id)
-            ->when((int) ($user->organisation_id ?? 0) > 0, function ($query) use ($user) {
-                $query->where('organisation_id', (int) $user->organisation_id);
-            })->first();
-
-        if (! $template) {
-            return;
-        }
-
-        $data = is_array($template->data) ? $template->data : [];
-
-        $this->jobName = (string) ($data['job_name'] ?? $template->name ?? $this->defaultJobName());
-        $this->customerName = (string) ($data['customer_name'] ?? '');
-        $this->length = (string) ($data['length'] ?? $this->length);
-        $this->labourRate = (string) ($data['labour_rate'] ?? $this->labourRate);
-        $this->markup = (string) ($data['markup'] ?? $this->markup);
-        $this->waste = (string) ($data['waste'] ?? $this->waste);
-        $this->vatRate = (string) ($data['vat_rate'] ?? $this->vatRate);
-        $this->paymentTerms = (string) ($data['payment_terms'] ?? $this->paymentTerms);
-
-        $this->dispatch('toast', message: 'Template loaded. Tweak values and save your quote.', type: 'info');
     }
 
     private function defaultJobName(): string

@@ -10,7 +10,7 @@
             <!-- Name -->
             <flux:input
                 name="name"
-                :label="__('Name')"
+                :label="__('Your Name *required')"
                 :value="old('name')"
                 type="text"
                 required
@@ -22,7 +22,7 @@
             <!-- Email Address -->
             <flux:input
                 name="email"
-                :label="__('Email address')"
+                :label="__('Your Email Address *required')"
                 :value="old('email')"
                 type="email"
                 required
@@ -30,10 +30,67 @@
                 placeholder="email@example.com"
             />
 
+            <!-- Business Name -->
+            <flux:input
+                name="business_name"
+                :label="__('Business Name *required')"
+                :value="old('business_name')"
+                type="text"
+                required
+                autofocus
+                autocomplete="business_name"
+                :placeholder="__('Business Name')"
+            />
+
+            <!-- Address -->
+            <flux:input
+                name="address"
+                :label="__('Business Address (optional)')"
+                :value="old('address')"
+                type="text"
+                autofocus
+                autocomplete="address"
+                :placeholder="__('Business Address')"
+            />
+
+            <!-- City -->
+            <flux:input
+                name="city"
+                :label="__('City/Town (optional)')"
+                :value="old('city')"
+                type="text"
+                autofocus
+                autocomplete="city"
+                :placeholder="__('City')"
+            />
+
+            <!-- Post Code -->
+            <flux:input
+                name="postcode"
+                :label="__('Post Code (optional)')"
+                :value="old('postcode')"
+                type="text"
+                autofocus
+                autocomplete="postcode"
+                :placeholder="__('Postcode')"
+            />
+
+            <!-- Phone -->
+            <flux:input
+                name="phone"
+                :label="__('Business Phone *required')"
+                :value="old('phone')"
+                type="text"
+                required
+                autofocus
+                autocomplete="phone"
+                :placeholder="__('Business phone')"
+            />
+
             <!-- Password -->
             <flux:input
                 name="password"
-                :label="__('Password')"
+                :label="__('Password *required')"
                 type="password"
                 required
                 autocomplete="new-password"
@@ -44,7 +101,7 @@
             <!-- Confirm Password -->
             <flux:input
                 name="password_confirmation"
-                :label="__('Confirm password')"
+                :label="__('Confirm password *required')"
                 type="password"
                 required
                 autocomplete="new-password"

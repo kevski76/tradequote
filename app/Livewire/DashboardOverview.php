@@ -8,26 +8,25 @@ use App\Models\Quotes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 
 class DashboardOverview extends Component
 {
     public ?string $notice = null;
 
-    public function createQuote(): RedirectResponse
+    public function createQuote(): void
     {
-        return redirect()->route('quotes.create');
+        redirect()->route('quotes.create');
     }
 
-    public function useTemplate(int $templateId): RedirectResponse
+    public function useTemplate(int $templateId): void
     {
-        return redirect()->route('quotes.create', ['template' => $templateId]);
+        redirect()->route('quotes.create', ['template' => $templateId]);
     }
 
-    public function openQuote(int $quoteId): RedirectResponse
+    public function openQuote(int $quoteId): void
     {
-        return redirect()->route('quotes.pdf', ['quote' => $quoteId]);
+        redirect()->route('quotes.edit', ['quote' => $quoteId]);
     }
 
     public function render(): \Illuminate\View\View

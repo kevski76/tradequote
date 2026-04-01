@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 
 class Quotes extends Model
 {
@@ -14,11 +15,21 @@ class Quotes extends Model
      */
     protected $table = 'quotes';
 
+    protected static function booted(): void
+    {
+        static::creating(function (self $quote) {
+            if (empty($quote->uuid)) {
+                $quote->uuid = (string) Str::uuid();
+            }
+        });
+    }
+
     protected $fillable = [
         'organisation_id',
         'created_by', // user who made quote
         'module_id', // panel | closeboard
         'variant_key',
+        'uuid',
         'customer_name',
         'job_name',
         'status',
