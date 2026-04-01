@@ -45,6 +45,10 @@ class CreateNewUser implements CreatesNewUsers
                 'city'     => $input['city'] ?? null,
                 'postcode' => $input['postcode'] ?? null,
                 'phone'    => $input['phone'],
+                'quote_defaults' => [
+                    'global' => config('quotes.form_defaults.global', []),
+                    'modules' => config('quotes.form_defaults.modules', []),
+                ],
             ]);
 
             $user->update([

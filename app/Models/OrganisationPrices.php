@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class OrganisationPrices extends Model
@@ -16,10 +17,15 @@ class OrganisationPrices extends Model
 
     protected $fillable = [
         'organisation_id',
-        'module_item_id', 
+        'module_item_id',
         'cost_price',
         'pricing_type', // fixed | markup
         'markup_percent',
         'sell_price'
     ];
+
+    public function moduleItem(): BelongsTo
+    {
+        return $this->belongsTo(ModuleItems::class, 'module_item_id');
+    }
 }

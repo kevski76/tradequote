@@ -48,6 +48,10 @@ new #[Title('Business information')] class extends Component {
         if (empty($organisation)) {
             $organisation = Organisations::create([
                 'owner_id' => $user->id,
+                'quote_defaults' => [
+                    'global' => config('quotes.form_defaults.global', []),
+                    'modules' => config('quotes.form_defaults.modules', []),
+                ],
             ]);
 
             $user->update(['organisation_id' => $organisation->id]);
@@ -61,7 +65,7 @@ new #[Title('Business information')] class extends Component {
             'phone'    => $validated['phone'],
         ]);
 
-        $this->dispatch('business-updated');
+        $this->dispatch('toast', message: 'Business information saved.', type: 'success');
     }
 }; ?>
 
@@ -108,16 +112,10 @@ new #[Title('Business information')] class extends Component {
                 autocomplete="tel"
             />
 
-            <div class="flex items-center gap-4">
-                <div class="flex items-center justify-end">
-                    <flux:button variant="primary" type="submit" class="w-full">
-                        {{ __('Save') }}
-                    </flux:button>
-                </div>
-
-                <x-action-message class="me-3" on="business-updated">
-                    {{ __('Saved.') }}
-                </x-action-message>
+            <div class="flex items-center justify-end">
+                <flux:button variant="primary" type="submit" class="w-full">
+                    {{ __('Save') }}
+                </flux:button>
             </div>
         </form>
     </x-pages::settings.layout>

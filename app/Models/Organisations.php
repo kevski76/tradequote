@@ -22,5 +22,10 @@ class Organisations extends Model
         'postcode',
         'phone',
         'logo',
+        'quote_defaults',
+    ];
+
+    protected $casts = [
+        'quote_defaults' => 'array',
     ];
 }

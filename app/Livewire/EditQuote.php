@@ -3,7 +3,9 @@
 namespace App\Livewire;
 
 use App\Models\Organisations;
+use App\Models\QuoteItems;
 use App\Models\Quotes;
+use App\Services\QuoteCalculator;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -13,6 +15,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 class EditQuote extends Component
 {
     public int $quoteId;
+
+    public string $moduleSlug = 'fencing';
 
     public string $customerName = '';
 
@@ -47,6 +51,8 @@ class EditQuote extends Component
 
         $data = is_array($quote->calculation_data) ? $quote->calculation_data : [];
 
+        $this->moduleSlug = (string) ($quote->module?->slug ?? $quote->variant_key ?? $this->moduleSlug);
+
         $this->customerName = (string) ($quote->customer_name ?? '');
         $this->jobName = (string) ($quote->job_name ?? '');
         $this->length = (string) ($data['length'] ?? $quote->length ?? $this->length);
@@ -62,23 +68,26 @@ class EditQuote extends Component
         $this->validate($this->rules());
 
         $user = auth()->user();
-        $breakdown = $this->calculateBreakdown();
-
         $quote = Quotes::query()->findOrFail($this->quoteId);
+        $breakdown = $this->getBreakdown((int) $quote->organisation_id);
 
-        $quote->forceFill([
-            'customer_name' => $this->customerName !== '' ? $this->customerName : null,
-            'job_name' => $this->jobName !== '' ? $this->jobName : $this->defaultJobName(),
-            'length' => $breakdown['length'],
-            'labour_total' => (int) round($breakdown['labour_cost']),
-            'materials_total' => (int) round($breakdown['materials_cost']),
-            'subtotal_price' => (int) round($breakdown['subtotal']),
-            'vat_rate' => $breakdown['vat_rate'],
-            'vat_total' => (int) round($breakdown['vat_amount']),
-            'payment_terms' => trim($this->paymentTerms) !== '' ? trim($this->paymentTerms) : null,
-            'calculation_data' => $breakdown,
-            'total_price' => (int) round($breakdown['total_price']),
-        ])->save();
+        DB::transaction(function () use ($quote, $breakdown): void {
+            $quote->forceFill([
+                'customer_name' => $this->customerName !== '' ? $this->customerName : null,
+                'job_name' => $this->jobName !== '' ? $this->jobName : $this->defaultJobName(),
+                'length' => $breakdown['length'],
+                'labour_total' => (int) round($breakdown['labour_total']),
+                'materials_total' => (int) round($breakdown['materials_total']),
+                'subtotal_price' => (int) round($breakdown['subtotal']),
+                'vat_rate' => $breakdown['vat_rate'],
+                'vat_total' => (int) round($breakdown['vat_amount']),
+                'payment_terms' => trim($this->paymentTerms) !== '' ? trim($this->paymentTerms) : null,
+                'calculation_data' => $breakdown,
+                'total_price' => (int) round($breakdown['total_price']),
+            ])->save();
+
+            $this->storeQuoteItems($quote, $breakdown);
+        });
 
         $pdfBytes = $this->renderPdfBytes($quote, $breakdown, (int) $user->id, (string) $user->email, (string) $user->name);
         $this->persistQuotePdf($quote, $pdfBytes);
@@ -91,9 +100,8 @@ class EditQuote extends Component
         $this->validate($this->rules());
 
         $user = auth()->user();
-        $breakdown = $this->calculateBreakdown();
-
         $quote = Quotes::query()->findOrFail($this->quoteId);
+        $breakdown = $this->getBreakdown((int) $quote->organisation_id);
         $pdfBytes = $this->renderPdfBytes($quote, $breakdown, (int) $user->id, (string) $user->email, (string) $user->name);
 
         $fileName = 'tradepulse-quote-'.$quote->id.'.pdf';
@@ -105,9 +113,39 @@ class EditQuote extends Component
 
     public function render(): \Illuminate\View\View
     {
+        $quote = Quotes::query()->find($this->quoteId);
+
         return view('livewire.edit-quote', [
-            'breakdown' => $this->calculateBreakdown(),
+            'breakdown' => $this->getBreakdown((int) ($quote?->organisation_id ?? 0)),
         ]);
+    }
+
+    private function storeQuoteItems(Quotes $quote, array $breakdown): void
+    {
+        $items = is_array($breakdown['items'] ?? null) ? $breakdown['items'] : [];
+
+        QuoteItems::query()->where('quote_id', (int) $quote->id)->delete();
+
+        if ($items === []) {
+            return;
+        }
+
+        $rows = [];
+
+        foreach ($items as $item) {
+            $rows[] = [
+                'quote_id' => (int) $quote->id,
+                'module_item_id' => isset($item['module_item_id']) ? (int) $item['module_item_id'] : null,
+                'name' => (string) ($item['name'] ?? 'Quote item'),
+                'quantity' => (int) round((float) ($item['quantity'] ?? 0)),
+                'unit_price' => (int) round((float) ($item['unit_price'] ?? 0)),
+                'total_price' => (int) round((float) ($item['total'] ?? 0)),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        QuoteItems::query()->insert($rows);
     }
 
     private function persistQuotePdf(Quotes $quote, string $pdfBytes): void
@@ -207,44 +245,19 @@ class EditQuote extends Component
         ];
     }
 
-    private function calculateBreakdown(): array
+    private function getBreakdown(int $organisationId): array
     {
-        $length = $this->toFloat($this->length);
-        $labourRate = $this->toFloat($this->labourRate);
-        $markup = $this->toFloat($this->markup);
-        $waste = $this->toFloat($this->waste);
-        $vatRate = $this->toFloat($this->vatRate);
-
-        $posts = $length > 0 ? ((int) ceil($length / 1.8)) + 1 : 0;
-        $boards = $length > 0 ? (int) ceil($length * 9) : 0;
-
-        $postUnitPrice = 18.00;
-        $boardUnitPrice = 4.00;
-
-        $materialsBase = ($posts * $postUnitPrice) + ($boards * $boardUnitPrice);
-        $materialsCost = round($materialsBase * (1 + ($waste / 100)), 2);
-        $labourCost = round($length * $labourRate, 2);
-        $subtotal = round($materialsCost + $labourCost, 2);
-        $markedUpSubtotal = round($subtotal * (1 + ($markup / 100)), 2);
-        $vatAmount = round($markedUpSubtotal * ($vatRate / 100), 2);
-        $totalPrice = round($markedUpSubtotal + $vatAmount, 2);
-
-        return [
-            'length' => $length,
-            'labour_rate' => $labourRate,
-            'markup' => $markup,
-            'waste' => $waste,
-            'vat_rate' => $vatRate,
-            'posts_qty' => $posts,
-            'posts_price' => round($posts * $postUnitPrice, 2),
-            'boards_qty' => $boards,
-            'boards_price' => round($boards * $boardUnitPrice, 2),
-            'labour_cost' => $labourCost,
-            'materials_cost' => $materialsCost,
-            'subtotal' => $markedUpSubtotal,
-            'vat_amount' => $vatAmount,
-            'total_price' => $totalPrice,
-        ];
+        return app(QuoteCalculator::class)->calculate([
+            'organisation_id' => $organisationId,
+            'module_slug' => $this->moduleSlug,
+            'inputs' => [
+                'length' => $this->toFloat($this->length),
+                'labour_rate' => $this->toFloat($this->labourRate),
+                'markup' => $this->toFloat($this->markup),
+                'waste' => $this->toFloat($this->waste),
+                'vat_rate' => $this->toFloat($this->vatRate),
+            ],
+        ]);
     }
 
     private function toFloat(string|int|float|null $value): float

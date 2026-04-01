@@ -3,7 +3,7 @@
         waOpen: false,
         waPhone: '+44',
         waMessage: '',
-        openModal(phone, message) {
+        openModal(phone, message) { 
             this.waPhone = phone;
             this.waMessage = message;
             this.waOpen = true;

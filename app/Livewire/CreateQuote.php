@@ -3,9 +3,11 @@
 namespace App\Livewire;
 
 use App\Models\Modules;
+use App\Models\QuoteItems;
 use App\Models\QuoteTemplates;
 use App\Models\Quotes;
 use App\Models\Organisations;
+use App\Services\QuoteCalculator;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -14,34 +16,81 @@ use Livewire\Component;
 
 class CreateQuote extends Component
 {
+    public string $moduleSlug = 'fencing';
+
     public string $customerName = '';
 
     public string $jobName = '';
 
-    public string $length = '15';
+    public string $length = '';
 
-    public string $labourRate = '35';
+    public string $labourRate = '';
 
-    public string $markup = '15';
+    public string $markup = '';
 
-    public string $waste = '8';
+    public string $waste = '';
 
-    public string $vatRate = '20';
+    public string $vatRate = '';
 
     public string $paymentTerms = '';
 
-    public string $whatsappPhone = '+44';
+    public string $whatsappPhone = '';
 
     public string $whatsappMessage = '';
 
     public function mount(): void
     {
+        $this->applyDefaultFormValues();
         $this->jobName = $this->defaultJobName();
 
         $templateId = request()->integer('template');
         if ($templateId > 0) {
             $this->loadTemplate($templateId);
         }
+    }
+
+    private function applyDefaultFormValues(): void
+    {
+        $organisationId = (int) (auth()->user()?->organisation_id ?? 0);
+
+        $global = config('quotes.form_defaults.global', []);
+        $module = config('quotes.form_defaults.modules.'.$this->moduleSlug, []);
+
+        $organisationDefaults = $this->loadOrganisationFormDefaults($organisationId);
+        $organisationGlobal = is_array($organisationDefaults['global'] ?? null)
+            ? $organisationDefaults['global']
+            : [];
+        $organisationModule = is_array($organisationDefaults['modules'][$this->moduleSlug] ?? null)
+            ? $organisationDefaults['modules'][$this->moduleSlug]
+            : [];
+
+        // Precedence: organisation module > organisation global > config module > config global
+        $defaults = array_merge($global, $module, $organisationGlobal, $organisationModule);
+
+        $this->length = (string) ($defaults['length'] ?? '15');
+        $this->labourRate = (string) ($defaults['labour_rate'] ?? '35');
+        $this->markup = (string) ($defaults['markup'] ?? '15');
+        $this->waste = (string) ($defaults['waste'] ?? '8');
+        $this->vatRate = (string) ($defaults['vat_rate'] ?? '20');
+        $this->paymentTerms = (string) ($defaults['payment_terms'] ?? '');
+        $this->whatsappPhone = (string) ($defaults['whatsapp_phone'] ?? '+44');
+    }
+
+    private function loadOrganisationFormDefaults(int $organisationId): array
+    {
+        if ($organisationId <= 0) {
+            return [];
+        }
+
+        $organisation = Organisations::query()->find($organisationId);
+
+        if (! $organisation) {
+            return [];
+        }
+
+        $defaults = $organisation->quote_defaults;
+
+        return is_array($defaults) ? $defaults : [];
     }
 
     public function updatedLength(): void
@@ -56,7 +105,7 @@ class CreateQuote extends Component
         $this->validate($this->rules());
 
         $user = auth()->user();
-        $breakdown = $this->calculateBreakdown();
+        $breakdown = $this->getBreakdown((int) ($user->organisation_id ?? 0));
 
         $quote = $this->createQuoteRecord($breakdown, (int) $user->id, (int) ($user->organisation_id ?? 0));
         $pdfBytes = $this->renderPdfBytes($quote, $breakdown, (int) $user->id, (string) $user->email, (string) $user->name);
@@ -70,11 +119,11 @@ class CreateQuote extends Component
         $this->validate($this->rules());
 
         $user = auth()->user();
-        $breakdown = $this->calculateBreakdown();
+        $breakdown = $this->getBreakdown((int) ($user->organisation_id ?? 0));
 
         $module = Modules::query()->firstOrCreate(
-            ['slug' => 'fencing'],
-            ['name' => 'Fencing']
+            ['slug' => $this->moduleSlug],
+            ['name' => Str::title($this->moduleSlug)]
         );
 
         QuoteTemplates::query()->create([
@@ -82,7 +131,7 @@ class CreateQuote extends Component
             'created_by' => (int) $user->id,
             'name' => $this->jobName !== '' ? $this->jobName : $this->defaultJobName(),
             'module_id' => (int) $module->id,
-            'variant_key' => 'fencing',
+            'variant_key' => $this->moduleSlug,
             'data' => [
                 'customer_name' => $this->customerName,
                 'job_name' => $this->jobName,
@@ -103,7 +152,7 @@ class CreateQuote extends Component
         $this->validate($this->rules());
 
         $user = auth()->user();
-        $breakdown = $this->calculateBreakdown();
+        $breakdown = $this->getBreakdown((int) ($user->organisation_id ?? 0));
         $quote = $this->createQuoteRecord($breakdown, (int) $user->id, (int) ($user->organisation_id ?? 0));
 
         $customerName = trim($this->customerName) !== '' ? trim($this->customerName) : 'there';
@@ -116,10 +165,11 @@ class CreateQuote extends Component
     }
 
     public function downloadPdf()
-    {        $this->validate($this->rules());
+    {        
+        $this->validate($this->rules());
 
         $user = auth()->user();
-        $breakdown = $this->calculateBreakdown();
+        $breakdown = $this->getBreakdown((int) ($user->organisation_id ?? 0));
         $quote = $this->createQuoteRecord($breakdown, (int) $user->id, (int) ($user->organisation_id ?? 0));
         $pdfBytes = $this->renderPdfBytes($quote, $breakdown, (int) $user->id, (string) $user->email, (string) $user->name);
         $this->persistQuotePdf($quote, $pdfBytes);
@@ -134,36 +184,68 @@ class CreateQuote extends Component
     public function render(): \Illuminate\View\View
     {
         return view('livewire.create-quote', [
-            'breakdown' => $this->calculateBreakdown(),
+            'breakdown' => $this->getBreakdown((int) (auth()->user()?->organisation_id ?? 0)),
         ]);
     }
 
     private function createQuoteRecord(array $breakdown, int $userId, int $organisationId): Quotes
     {
         $module = Modules::query()->firstOrCreate(
-            ['slug' => 'fencing'],
-            ['name' => 'Fencing']
+            ['slug' => $this->moduleSlug],
+            ['name' => Str::title($this->moduleSlug)]
         );
 
-        return Quotes::query()->create([
-            'organisation_id' => $organisationId,
-            'created_by' => $userId,
-            'module_id' => (int) $module->id,
-            'variant_key' => Str::slug($this->jobName !== '' ? $this->jobName : $this->defaultJobName()),
-            'customer_name' => $this->customerName !== '' ? $this->customerName : null,
-            'job_name' => $this->jobName !== '' ? $this->jobName : $this->defaultJobName(),
-            'status' => 'draft',
-            'length' => $breakdown['length'],
-            'labour_type' => 'per_metre',
-            'labour_total' => (int) round($breakdown['labour_cost']),
-            'materials_total' => (int) round($breakdown['materials_cost']),
-            'subtotal_price' => (int) round($breakdown['subtotal']),
-            'vat_rate' => $breakdown['vat_rate'],
-            'vat_total' => (int) round($breakdown['vat_amount']),
-            'payment_terms' => trim($this->paymentTerms) !== '' ? trim($this->paymentTerms) : null,
-            'calculation_data' => $breakdown,
-            'total_price' => (int) round($breakdown['total_price']),
-        ]);
+        return DB::transaction(function () use ($breakdown, $organisationId, $userId, $module): Quotes {
+            $quote = Quotes::query()->create([
+                'organisation_id' => $organisationId,
+                'created_by' => $userId,
+                'module_id' => (int) $module->id,
+                'variant_key' => Str::slug($this->jobName !== '' ? $this->jobName : $this->defaultJobName()),
+                'customer_name' => $this->customerName !== '' ? $this->customerName : null,
+                'job_name' => $this->jobName !== '' ? $this->jobName : $this->defaultJobName(),
+                'status' => 'draft',
+                'length' => $breakdown['length'],
+                'labour_type' => 'per_metre',
+                'labour_total' => (int) round($breakdown['labour_total']),
+                'materials_total' => (int) round($breakdown['materials_total']),
+                'subtotal_price' => (int) round($breakdown['subtotal']),
+                'vat_rate' => $breakdown['vat_rate'],
+                'vat_total' => (int) round($breakdown['vat_amount']),
+                'payment_terms' => trim($this->paymentTerms) !== '' ? trim($this->paymentTerms) : null,
+                'calculation_data' => $breakdown,
+                'total_price' => (int) round($breakdown['total_price']),
+            ]);
+
+            $this->storeQuoteItems($quote, $breakdown);
+
+            return $quote;
+        });
+    }
+
+    private function storeQuoteItems(Quotes $quote, array $breakdown): void
+    {
+        $items = is_array($breakdown['items'] ?? null) ? $breakdown['items'] : [];
+
+        if ($items === []) {
+            return;
+        }
+
+        $rows = [];
+
+        foreach ($items as $item) {
+            $rows[] = [
+                'quote_id' => (int) $quote->id,
+                'module_item_id' => isset($item['module_item_id']) ? (int) $item['module_item_id'] : null,
+                'name' => (string) ($item['name'] ?? 'Quote item'),
+                'quantity' => (int) round((float) ($item['quantity'] ?? 0)),
+                'unit_price' => (int) round((float) ($item['unit_price'] ?? 0)),
+                'total_price' => (int) round((float) ($item['total'] ?? 0)),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        QuoteItems::query()->insert($rows);
     }
 
     private function persistQuotePdf(Quotes $quote, string $pdfBytes): void
@@ -292,44 +374,19 @@ class CreateQuote extends Component
         ];
     }
 
-    private function calculateBreakdown(): array
+    private function getBreakdown(int $organisationId): array
     {
-        $length = $this->toFloat($this->length);
-        $labourRate = $this->toFloat($this->labourRate);
-        $markup = $this->toFloat($this->markup);
-        $waste = $this->toFloat($this->waste);
-        $vatRate = $this->toFloat($this->vatRate);
-
-        $posts = $length > 0 ? ((int) ceil($length / 1.8)) + 1 : 0;
-        $boards = $length > 0 ? (int) ceil($length * 9) : 0;
-
-        $postUnitPrice = 18.00;
-        $boardUnitPrice = 4.00;
-
-        $materialsBase = ($posts * $postUnitPrice) + ($boards * $boardUnitPrice);
-        $materialsCost = round($materialsBase * (1 + ($waste / 100)), 2);
-        $labourCost = round($length * $labourRate, 2);
-        $subtotal = round($materialsCost + $labourCost, 2);
-        $markedUpSubtotal = round($subtotal * (1 + ($markup / 100)), 2);
-        $vatAmount = round($markedUpSubtotal * ($vatRate / 100), 2);
-        $totalPrice = round($markedUpSubtotal + $vatAmount, 2);
-
-        return [
-            'length' => $length,
-            'labour_rate' => $labourRate,
-            'markup' => $markup,
-            'waste' => $waste,
-            'vat_rate' => $vatRate,
-            'posts_qty' => $posts,
-            'posts_price' => round($posts * $postUnitPrice, 2),
-            'boards_qty' => $boards,
-            'boards_price' => round($boards * $boardUnitPrice, 2),
-            'labour_cost' => $labourCost,
-            'materials_cost' => $materialsCost,
-            'subtotal' => $markedUpSubtotal,
-            'vat_amount' => $vatAmount,
-            'total_price' => $totalPrice,
-        ];
+        return app(QuoteCalculator::class)->calculate([
+            'organisation_id' => $organisationId,
+            'module_slug' => $this->moduleSlug,
+            'inputs' => [
+                'length' => $this->toFloat($this->length),
+                'labour_rate' => $this->toFloat($this->labourRate),
+                'markup' => $this->toFloat($this->markup),
+                'waste' => $this->toFloat($this->waste),
+                'vat_rate' => $this->toFloat($this->vatRate),
+            ],
+        ]);
     }
 
     private function toFloat(string|int|float|null $value): float

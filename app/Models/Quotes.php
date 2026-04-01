@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 
@@ -53,4 +55,14 @@ class Quotes extends Model
         'calculation_data' => 'array',
         'pdf_generated_at' => 'datetime',
     ];
+
+    public function quoteItems(): HasMany
+    {
+        return $this->hasMany(QuoteItems::class, 'quote_id');
+    }
+
+    public function module(): BelongsTo
+    {
+        return $this->belongsTo(Modules::class, 'module_id');
+    }
 }

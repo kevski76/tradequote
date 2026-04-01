@@ -62,7 +62,7 @@ new #[Title('Security settings')] class extends Component {
 
         $this->reset('current_password', 'password', 'password_confirmation');
 
-        $this->dispatch('password-updated');
+        $this->dispatch('toast', message: 'Password updated successfully.', type: 'success');
     }
 
     /**
@@ -117,16 +117,10 @@ new #[Title('Security settings')] class extends Component {
                 viewable
             />
 
-            <div class="flex items-center gap-4">
-                <div class="flex items-center justify-end">
-                    <flux:button variant="primary" type="submit" class="w-full" data-test="update-password-button">
-                        {{ __('Save') }}
-                    </flux:button>
-                </div>
-
-                <x-action-message class="me-3" on="password-updated">
-                    {{ __('Saved.') }}
-                </x-action-message>
+            <div class="flex items-center justify-end">
+                <flux:button variant="primary" type="submit" class="w-full" data-test="update-password-button">
+                    {{ __('Save') }}
+                </flux:button>
             </div>
         </form>
 
