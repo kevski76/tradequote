@@ -19,9 +19,16 @@ class OrganisationPrices extends Model
         'organisation_id',
         'module_item_id',
         'cost_price',
+        'cost_prices_by_height',
         'pricing_type', // fixed | markup
         'markup_percent',
-        'sell_price'
+        'sell_price',
+        'sell_prices_by_height',
+    ];
+
+    protected $casts = [
+        'cost_prices_by_height' => 'array',
+        'sell_prices_by_height' => 'array',
     ];
 
     public function moduleItem(): BelongsTo

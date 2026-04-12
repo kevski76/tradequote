@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{{ __('Welcome') }} - {{ config('app.name', 'Laravel') }}</title>
+        <title>{{ __('Welcome') }} - {{ config('app.name', 'FlashQuote') }}</title>
 
         <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -13,6 +13,9 @@
         <!-- Fonts -->
         <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Inter+Tight:wght@300;500;600&amp;display=swap" nonce="">
 
+        <!-- Lucide Icons -->
+        <script src="https://unpkg.com/lucide@latest"></script>
+        
         <!-- Styles -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <style>
@@ -43,13 +46,13 @@
                                 <path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path>
                             </svg>
                         </div>
-                        <span class="text-xl font-bold tracking-tight text-slate-900">QuoteFlow</span>
+                        <a href="{{ url('/') }}">
+                            <span class="text-xl font-bold tracking-tight text-slate-900">FlashQuote</span>
+                        </a>
                     </div>
                 
                     <div class="hidden md:flex gap-8 items-center">
-                        <a href="#" class="text-sm font-bold text-emerald-600 border-b-2 border-emerald-500 pb-0.5">Features</a>
-                        <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">How it Works</a>
-                        <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">Pricing</a>
+                        <a href="{{ url('/') }}/pricing" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">Pricing</a>
                     </div>
 
                     <div class="flex items-center gap-3">
@@ -80,8 +83,6 @@
                 <div id="welcome-mobile-menu" class="hidden md:hidden pt-4">
                     <div class="rounded-3xl border border-emerald-100 bg-white px-5 py-5 shadow-lg shadow-emerald-900/5">
                         <div class="flex flex-col gap-4">
-                            <a href="#" class="text-sm font-bold text-emerald-600" data-mobile-nav-link>Features</a>
-                            <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors" data-mobile-nav-link>How it Works</a>
                             <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors" data-mobile-nav-link>Pricing</a>
                         </div>
                         <button onclick="scrollToForm()" class="mt-5 w-full bg-linear-to-r cursor-pointer from-[#00684e] to-[#74f3c6] cursor-pointer text-white px-5 py-3 rounded-full text-sm font-bold shadow-lg shadow-emerald-900/10">
@@ -102,13 +103,13 @@
                             <path d="M20 2v4"></path>
                             <path d="M22 4h-4"></path>
                             <circle cx="4" cy="20" r="2"></circle>
-                        </svg>Beta Access Now Open
+                        </svg>Built for modern trades
                     </div>
                     <h1 class="text-5xl md:text-7xl font-black tracking-tighter leading-[0.95]">
-                        Win the job before you leave the <span class="text-[#00684e]">driveway</span>
+                        Win More Jobs Without More <span class="text-[#00684e]">Admin</span>
                     </h1>
                     <p class="text-xl text-slate-600 max-w-lg leading-relaxed">
-                        Create and send a professional quote in under 60 seconds — straight from your phone.
+                        Simple tools for trades to send quotes faster, get more reviews, and grow their business — without complicated software.
                     </p>
                     <div class="flex flex-wrap gap-4 pt-4">
                         <button onclick="scrollToForm()" class="bg-gradient-to-r from-[#00684e] to-[#74f3c6] text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-emerald-900/20 
@@ -131,124 +132,199 @@
                 </div>
             </div>
         </section>
-        <!--
-        <section class="py-24 bg-[#edf0f5] reveal">
-            <div class="max-w-7xl mx-auto px-6 text-center">
-                <div style="opacity: 1; transform: none;">
-                    <h2 class="text-4xl font-bold mb-4">See it in action</h2>
-                    <p class="text-slate-600 text-lg max-w-2xl mx-auto mb-16">No forms. No paperwork. Just enter the job and send the quote.</p>
+
+         <!-- Problem Section -->
+        <section class="py-20 px-6 bg-[#eef1f3]">
+            <div class="max-w-7xl mx-auto text-center space-y-4 mb-16  reveal" x-intersect="$el.classList.add('visible')">
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight">Most trade software is overkill</h2>
+                <p class="text-on-surface-variant font-label">Why settle for complex when you need simple?</p>
+            </div>
+            
+            <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-white p-8 rounded-2xl flex items-start gap-4 shadow-sm border border-black/5  reveal transition-all hover:-translate-y-1" x-intersect="$el.classList.add('visible')">
+                    <div class="p-3 bg-red-50 text-red-500 rounded-full">
+                        <i data-lucide="ban" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-2">Too many features you don't need</h3>
+                        <p class="text-on-surface-variant text-sm leading-relaxed">Don't pay for bloat. Focus only on what moves the needle for your trade business.</p>
+                    </div>
                 </div>
-                <div class="relative max-w-4xl mx-auto rounded-[2rem] overflow-hidden bg-slate-900 shadow-2xl aspect-video group cursor-pointer" style="opacity: 1; transform: none;">
-                    <img alt="Dashboard" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" referrerpolicy="no-referrer" src="{{ url('/') }}/images/homepage-video-placeholder.png">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="w-20 h-20 bg-[#00684e] rounded-full flex items-center justify-center text-white shadow-xl" tabindex="0" style="transform: none;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-play w-10 h-10 fill-current" aria-hidden="true">
-                                    <path d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z"></path>
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                </svg>
-                            </div>
-                        </div>
+                <!-- Card 2 -->
+                <div class="bg-white p-8 rounded-2xl flex items-start gap-4 shadow-sm border border-black/5  reveal transition-all hover:-translate-y-1" x-intersect="$el.classList.add('visible')">
+                    <div class="p-3 bg-red-50 text-red-500 rounded-full">
+                        <i data-lucide="dollar-sign" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-2">Too expensive for small teams</h3>
+                        <p class="text-on-surface-variant text-sm leading-relaxed">Enterprise pricing shouldn't apply to hard-working local teams.</p>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white p-8 rounded-2xl flex items-start gap-4 shadow-sm border border-black/5  reveal transition-all hover:-translate-y-1" x-intersect="$el.classList.add('visible')">
+                    <div class="p-3 bg-red-50 text-red-500 rounded-full">
+                        <i data-lucide="clock" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-2">Takes too long to learn</h3>
+                        <p class="text-on-surface-variant text-sm leading-relaxed">You should be on the job site, not spending weeks in software training.</p>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="bg-white p-8 rounded-2xl flex items-start gap-4 shadow-sm border border-black/5  reveal transition-all hover:-translate-y-1" x-intersect="$el.classList.add('visible')">
+                    <div class="p-3 bg-red-50 text-red-500 rounded-full">
+                        <i data-lucide="trending-down" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-2">Still doesn't help you win more work</h3>
+                        <p class="text-on-surface-variant text-sm leading-relaxed">Shiny buttons are useless if they don't help you close the next contract.</p>
                     </div>
                 </div>
             </div>
         </section>
-        -->
 
-        {{-- Problem Section --}}
-        <section class="py-28 bg-[#0b0f10] text-white overflow-hidden reveal">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="grid lg:grid-cols-2 gap-20 items-center">
-                    <div class="space-y-12">
-                        <h2 class="text-4xl md:text-5xl font-extrabold leading-tight">
-                            Most trades lose <br/><span class="text-red-400">jobs here</span>
-                        </h2>
-                        
-                        <div class="space-y-6">
-                            @foreach([
-                                ['id' => '01', 'text' => 'You finish the job visit'],
-                                ['id' => '02', 'text' => 'Say “I’ll send a quote later”'],
-                                ['id' => '03', 'text' => 'Get busy with life & work'],
-                                ['id' => '04', 'text' => 'Customer goes with someone faster', 'highlight' => true],
-                            ] as $item)
-                                <div class="flex items-center gap-6 p-6 rounded-2xl bg-white/5 border border-white/10 {{ isset($item['highlight']) ? 'border-red-400/30 bg-red-400/5' : '' }}">
-                                    <span class="text-3xl font-bold {{ isset($item['highlight']) ? 'text-red-400' : 'text-slate-400' }}">{{ $item['id'] }}</span>
-                                    <p class="text-lg {{ isset($item['highlight']) ? 'font-bold' : 'text-slate-400' }}">{{ $item['text'] }}</p>
-                                </div>
-                            @endforeach
+        <!-- Solution Section -->
+        <section class="py-32 px-6">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <div class="relative order-2 lg:order-1 reveal">
+                    <div class="bg-surface-variant rounded-3xl p-6 aspect-square max-w-lg mx-auto overflow-hidden">
+                        <img 
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9K0p1G0WX8zooVP-dVNscGhaZgK_o9yGrR2GlbEgxspydK92WbSfHkUzMfWyhU6srndJeRBSTg26obtQuISjg-eoTiA20RazDwVuC6GXLnjFU7a6mgOFTShDp_hrnFpqwEC8cfF5bpM8n-KYUmgeQQC5EF8Sc8H_H5eCKoWrBHDOhHE95lCirLS8VndnPStC1Nz8StP-dcu1rslrmhOZwd9v1dTgH7Qq1-dMMnaNKOTiDcoHFNE93iACxWn89PGTtHEE0EnikmGFw" 
+                            alt="Professional working" 
+                            class="w-full h-full object-cover rounded-2xl shadow-xl"
+                            referrerPolicy="no-referrer"
+                        >
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 bg-[#00684e] p-6 rounded-2xl shadow-2xl text-[#c6ffe6] transform transition-transform duration-700 delay-300" x-intersect="$el.classList.add('scale-110')">
+                        <div class="text-3xl font-bold">100%</div>
+                        <p class="text-xs font-label uppercase tracking-widest opacity-80">Built for trades</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-10 order-1 lg:order-2 reveal">
+                    <div class="space-y-4">
+                        <h2 class="text-4xl font-extrabold tracking-tight">Built for how trades actually work</h2>
+                        <p class="text-xl text-on-surface-variant">We removed the fluff and kept the essentials to help you scale.</p>
+                    </div>
+                    <ul class="space-y-6">
+                        <li class="flex items-center gap-4 reveal">
+                            <div class="p-2 bg-[#74f3c6] text-[#00684e] rounded-lg">
+                                <i data-lucide="fast-forward" class="w-5 h-5"></i>
+                            </div>
+                            <span class="text-lg font-medium">Fast quoting from your phone</span>
+                        </li>
+                        <li class="flex items-center gap-4 reveal">
+                            <div class="p-2 bg-[#74f3c6] text-[#00684e] rounded-lg">
+                                <i data-lucide="check-square" class="w-5 h-5"></i>
+                            </div>
+                            <span class="text-lg font-medium">Simple job tracking that makes sense</span>
+                        </li>
+                        <li class="flex items-center gap-4 reveal">
+                            <div class="p-2 bg-[#74f3c6] text-[#00684e] rounded-lg">
+                                <i data-lucide="star" class="w-5 h-5"></i>
+                            </div>
+                            <span class="text-lg font-medium">Automatic review requests upon completion</span>
+                        </li>
+                        <li class="flex items-center gap-4 reveal">
+                            <div class="p-2 bg-[#74f3c6] text-[#00684e] rounded-lg">
+                                <i data-lucide="eye-off" class="w-5 h-5"></i>
+                            </div>
+                            <span class="text-lg font-medium">No fluff, no complexity, no distractions</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bento Grid Section -->
+        <section id="features" class="py-24 px-6 bg-white reveal">
+            <div class="max-w-7xl mx-auto space-y-16">
+                <div class="text-center space-y-4 reveal">
+                    <h2 class="text-4xl font-extrabold tracking-tight">Focus on your craft, we'll handle the rest</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Benefit 1 -->
+                    <div class="md:col-span-2 bg-[#f4f7f9] p-10 rounded-3xl relative overflow-hidden group border border-black/5 reveal transition-all hover:-translate-y-1">
+                        <div class="relative z-10 space-y-4 max-w-sm">
+                            <div class="text-[#00684e] font-bold text-3xl">Save Time</div>
+                            <p class="text-[#585c5e]">Create and send professional quotes in minutes, not hours. Reclaim your evenings for what matters.</p>
                         </div>
-                        <p class="text-2xl font-bold italic text-slate-400" style="opacity: 1; transform: none;">"Speed wins. Delays lose work."</p>
+                        <div class="absolute right-0 bottom-0 translate-y-1/4 translate-x-1/4 w-2/3 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <i data-lucide="timer" class="w-full h-full text-primary" stroke-width="1"></i>
+                        </div>
                     </div>
                     
-                    <div class="hidden lg:block">
-                        <img src="{{ url('/') }}/images/exhausted-worker.jpg" alt="Exhausted worker" class="rounded-3xl opacity-60">
+                    <!-- Benefit 2 -->
+                    <div class="bg-[#00684e] text-[#c6ffe6] p-10 rounded-3xl flex flex-col justify-between shadow-xl shadow-primary/10 reveal transition-all hover:-translate-y-1">
+                        <i data-lucide="message-square" class="w-12 h-12 fill-current mb-8"></i>
+                        <div class="space-y-4">
+                            <h3 class="text-2xl font-bold">Get More Reviews</h3>
+                            <p class="text-[#c6ffe6]">Automatically request reviews after every job. Let your reputation do the selling for you.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Benefit 3 -->
+                    <div class="md:col-span-3 bg-slate-950 text-white p-10 rounded-3xl flex flex-col md:flex-row items-center gap-12 overflow-hidden  reveal" x-intersect="$el.classList.add('visible')">
+                        <div class="space-y-6 flex-1">
+                            <h3 class="text-4xl font-bold">Win More Work</h3>
+                            <p class="text-lg text-slate-400">Look more professional and respond faster than competitors. In a world of slow replies, speed is your secret weapon.</p>
+                            <div class="flex flex-wrap gap-4">
+                                <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                                    <span class="text-[#74f3c6] block font-bold text-2xl">40%</span>
+                                    <span class="text-[10px] font-label uppercase tracking-wider text-slate-500">Higher Close Rate</span>
+                                </div>
+                                <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                                    <span class="text-[#74f3c6] block font-bold text-2xl">2.5x</span>
+                                    <span class="text-[10px] font-label uppercase tracking-wider text-slate-500">Faster Response</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-1 w-full max-w-md">
+                            <img 
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBs95hnO_aYLph-nu0PogSf3ZZ8FaAaEIrLzDjyWXNt8OG5xC5ufR2qQjK9xTQFEfZKUovIX8o-sPiEbP7qnarFx9XiYW3ddr0Q590wyB7WOZozcgWV6kKKJflXjA3_y7Ps-qunf6v50YqnYwsP_5gPt3XganS4o-L4a1sIVydQMbISO4iyTj64WU1Jki8kM2bGKqS44eXDZt0qkw7NDVWpRoiNdyGyN_hYKQXCtaZ2S8f5sJng-xu3im7XCRqkl4ZdWe4NKnTV2vZC" 
+                                alt="Professional handshake" 
+                                class="rounded-2xl shadow-2xl grayscale brightness-75 hover:grayscale-0 transition-all duration-700"
+                                referrerpolicy="no-referrer"
+                            >
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        {{-- Solution Section --}}
-        <section class="py-28 reveal">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="text-center mb-20">
-                    <h2 class="text-5xl font-extrabold tracking-tight mb-6" style="opacity: 1; transform: none;">Quote it there and then</h2>
-                    <div class="h-1.5 bg-[#00684e] mx-auto rounded-full" style="width: 96px;"></div>
+        <!-- Who It's For -->
+        <section class="py-32 px-6 reveal">
+            <div class="max-w-7xl mx-auto flex flex-col items-center">
+                <h2 class="text-3xl font-extrabold text-center mb-16 reveal">Perfect for small teams and solo pros</h2>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <div class="px-8 py-4 bg-[#edf1f3] rounded-full font-bold text-[#585c5e] transition-all cursor-default border border-black/5 hover:bg-[#74f3c6] hover:text-[#005a43] hover:scale-105">Fencing contractors</div>
+                    <div class="px-8 py-4 bg-[#edf1f3] rounded-full font-bold text-[#585c5e] transition-all cursor-default border border-black/5 hover:bg-[#74f3c6] hover:text-[#005a43] hover:scale-105">Landscapers</div>
+                    <div class="px-8 py-4 bg-[#edf1f3] rounded-full font-bold text-[#585c5e] transition-all cursor-default border border-black/5 hover:bg-[#74f3c6] hover:text-[#005a43] hover:scale-105">Electricians</div>
+                    <div class="px-8 py-4 bg-[#edf1f3] rounded-full font-bold text-[#585c5e] transition-all cursor-default border border-black/5 hover:bg-[#74f3c6] hover:text-[#005a43] hover:scale-105">Plumbers</div>
+                    <div class="px-8 py-4 bg-[#edf1f3] rounded-full font-bold text-[#585c5e] transition-all cursor-default border border-black/5 hover:bg-[#74f3c6] hover:text-[#005a43] hover:scale-105">Small trade businesses</div>
+                    <div class="px-8 py-4 bg-[#edf1f3] rounded-full font-bold text-[#585c5e] transition-all cursor-default border border-black/5 hover:bg-[#74f3c6] hover:text-[#005a43] hover:scale-105">Solo or small teams</div>
                 </div>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="bg-white p-10 rounded-3xl shadow-sm hover:shadow-xl transition-all border-b-4 border-[#00684e]" style="opacity: 1; transform: none;">
-                        <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center text-[#00684e] mb-8">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ruler w-8 h-8" aria-hidden="true">
-                                <path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"></path>
-                                <path d="m14.5 12.5 2-2"></path>
-                                <path d="m11.5 9.5 2-2"></path>
-                                <path d="m8.5 6.5 2-2"></path>
-                                <path d="m17.5 15.5 2-2"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold mb-4">Enter measurements</h3>
-                        <p class="text-slate-600">Simply tap in dimensions or select materials from your custom list.</p>
-                    </div>
-                    <div class="bg-white p-10 rounded-3xl shadow-sm hover:shadow-xl transition-all border-b-4 border-[#00684e]" style="opacity: 1; transform: none;">
-                        <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center text-[#00684e] mb-8">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calculator w-8 h-8" aria-hidden="true">
-                                <rect width="16" height="20" x="4" y="2" rx="2"></rect>
-                                <line x1="8" x2="16" y1="6" y2="6"></line>
-                                <line x1="16" x2="16" y1="14" y2="18"></line>
-                                <path d="M16 10h.01"></path>
-                                <path d="M12 10h.01"></path>
-                                <path d="M8 10h.01"></path>
-                                <path d="M12 14h.01"></path>
-                                <path d="M8 14h.01"></path>
-                                <path d="M12 18h.01"></path>
-                                <path d="M8 18h.01"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold mb-4">Price is calculated instantly</h3>
-                        <p class="text-slate-600">Your profit margins and labor costs are baked in automatically.</p>
-                    </div>
-                    <div class="bg-white p-10 rounded-3xl shadow-sm hover:shadow-xl transition-all border-b-4 border-[#00684e]" style="opacity: 1; transform: none;">
-                        <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center text-[#00684e] mb-8">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send w-8 h-8" aria-hidden="true">
-                                <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path>
-                                <path d="m21.854 2.147-10.94 10.939"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold mb-4">Send quote on the spot</h3>
-                        <p class="text-slate-600">Email or WhatsApp a professional PDF before you start the van.</p>
-                    </div>
-                </div>
-                <p class="text-center mt-16 text-2xl font-extrabold text-[#00684e]" style="opacity: 1; transform: none;">Done in under a minute.</p>
             </div>
         </section>
-        <section class="py-32 bg-[#00684e] relative overflow-hidden reveal">
-            <div class="max-w-7xl mx-auto px-6 text-center relative z-10" style="opacity: 1; transform: none;">
-                <h2 class="text-4xl md:text-7xl font-black text-white tracking-tighter uppercase leading-none">
-                    One extra job a month <br class="hidden md:block"> pays for this
-                </h2>
+
+        <!-- Final CTA Section -->
+        <section class="mx-6 mb-24 reveal">
+            <div class="max-w-7xl mx-auto bg-[#00684e] rounded-[2.5rem] p-12 md:p-24 text-center space-y-8 relative overflow-hidden shadow-2xl shadow-primary/20 reveal">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-primary-container/20 via-transparent to-transparent"></div>
+                <div class="relative z-10 space-y-6">
+                    <h2 class="text-4xl md:text-6xl font-extrabold text-[#c6ffe6] tracking-tighter">Start simple. Grow faster.</h2>
+                    <p class="text-xl text-[#c6ffe6] max-w-2xl mx-auto">No complicated setup. No learning curve. Get started today and see the difference by your next quote.</p>
+                    <div class="pt-6">
+                        <button onclick="scrollToForm()" class="bg-slate-800 text-white px-10 py-5 rounded-2xl font-extrabold text-lg shadow-2xl transition-all flex items-center gap-2 mx-auto hover:scale-105 hover:shadow-black/50 active:scale-95">
+                            Try It Free
+                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white rounded-full blur-[120px]"></div>
-            </div>
-        </section>   
+        </section>
 
         {{-- Early Access Section --}}
         <section class="py-28 reveal">
@@ -266,7 +342,7 @@
                                 <img alt="User" class="w-10 h-10 rounded-full border-2 border-white" referrerpolicy="no-referrer" src="https://i.pravatar.cc/100?img=12">
                                 <img alt="User" class="w-10 h-10 rounded-full border-2 border-white" referrerpolicy="no-referrer" src="https://i.pravatar.cc/100?img=13">
                             </div>
-                            <p class="text-sm font-bold text-slate-500 uppercase tracking-widest">JOIN 120+ TRADES ALREADY TESTING</p>
+                            <p class="text-sm font-bold text-slate-500 uppercase tracking-widest">JOIN 20+ TRADES ALREADY TESTING</p>
                         </div>
                     </div>
                     @livewire('early-access-registration')
@@ -277,13 +353,16 @@
         {{-- Footer --}}
         <footer class="bg-slate-50 py-8 px-8 border-t border-slate-200">
             <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-                <div class="text-lg font-bold text-emerald-900">QuoteFlow</div>
+                <div class="text-lg font-bold text-emerald-900">FlashQuote</div>
                 <div class="text-xs font-bold uppercase tracking-widest text-slate-400">
-                    © {{ date('Y') }} QuoteFlow. All rights reserved.
+                    © {{ date('Y') }} FlashQuote. All rights reserved.
                 </div>
             </div>
         </footer>
         <script>
+            // Initialize Lucide Icons
+            lucide.createIcons();
+
             function scrollToForm() {
                 const el = document.getElementById('earlyAccessForm');
                 const navHeight = document.querySelector('nav').offsetHeight;

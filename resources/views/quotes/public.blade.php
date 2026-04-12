@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Quote{{ isset($quote) && $quote->customer_name ? ' for ' . $quote->customer_name : '' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 <body class="min-h-screen bg-zinc-50 antialiased">
 
@@ -32,38 +33,61 @@
                 <h2 class="mb-4 text-xs font-semibold uppercase tracking-wide text-zinc-400">Breakdown</h2>
 
                 <div class="space-y-2 text-sm">
-                    @if(isset($breakdown['posts_qty']))
-                    <div class="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2">
-                        <span class="text-zinc-600">Posts ({{ number_format($breakdown['posts_qty']) }})</span>
-                        <span class="font-semibold text-zinc-900">&pound;{{ number_format($breakdown['posts_price'] ?? 0, 2) }}</span>
-                    </div>
+                    {{-- Dynamic items (new quotes) --}}
+                    @php
+                        $pubMaterialItems = array_filter($breakdown['items'] ?? [], fn($i) => ($i['type'] ?? '') === 'material');
+                        $pubLabourItems   = array_filter($breakdown['items'] ?? [], fn($i) => ($i['type'] ?? '') === 'labour');
+                    @endphp
+
+                    @if (count($pubMaterialItems) > 0)
+                        @foreach ($pubMaterialItems as $item)
+                        <div class="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2">
+                            <span class="text-zinc-600">{{ $item['name'] }} ({{ number_format($item['quantity']) }})</span>
+                            <span class="font-semibold text-zinc-900">&pound;{{ number_format($item['total'], 2) }}</span>
+                        </div>
+                        @endforeach
+                    @else
+                        {{-- Legacy rows for quotes saved before the refactor --}}
+                        @if(isset($breakdown['posts_qty']))
+                        <div class="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2">
+                            <span class="text-zinc-600">Posts ({{ number_format($breakdown['posts_qty']) }})</span>
+                            <span class="font-semibold text-zinc-900">&pound;{{ number_format($breakdown['posts_price'] ?? 0, 2) }}</span>
+                        </div>
+                        @endif
+
+                        @if(isset($breakdown['boards_qty']))
+                        <div class="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2">
+                            <span class="text-zinc-600">Boards / Panels ({{ number_format($breakdown['boards_qty']) }})</span>
+                            <span class="font-semibold text-zinc-900">&pound;{{ number_format($breakdown['boards_price'] ?? 0, 2) }}</span>
+                        </div>
+                        @endif
                     @endif
 
-                    @if(isset($breakdown['boards_qty']))
+                    @foreach ($pubLabourItems as $item)
                     <div class="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2">
-                        <span class="text-zinc-600">Boards / Panels ({{ number_format($breakdown['boards_qty']) }})</span>
-                        <span class="font-semibold text-zinc-900">&pound;{{ number_format($breakdown['boards_price'] ?? 0, 2) }}</span>
+                        <span class="text-zinc-600">{{ $item['name'] }} ({{ number_format($item['quantity'], 1) }}m)</span>
+                        <span class="font-semibold text-zinc-900">&pound;{{ number_format($item['total'], 2) }}</span>
                     </div>
-                    @endif
+                    @endforeach
 
-                    @if(isset($breakdown['materials_cost']))
+                    @if(isset($breakdown['materials_with_waste']) || isset($breakdown['materials_cost']))
                     <div class="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2">
                         <span class="text-zinc-600">Materials (inc. waste)</span>
-                        <span class="font-semibold text-zinc-900">&pound;{{ number_format($breakdown['materials_cost'], 2) }}</span>
+                        <span class="font-semibold text-zinc-900">&pound;{{ number_format($breakdown['materials_with_waste'] ?? $breakdown['materials_cost'] ?? 0, 2) }}</span>
                     </div>
                     @endif
 
-                    @if(isset($breakdown['labour_cost']))
+                    @if(isset($breakdown['labour_total']) || isset($breakdown['labour_cost']))
                     <div class="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2">
                         <span class="text-zinc-600">Labour</span>
-                        <span class="font-semibold text-zinc-900">&pound;{{ number_format($breakdown['labour_cost'], 2) }}</span>
+                        <span class="font-semibold text-zinc-900">&pound;{{ number_format($breakdown['labour_total'] ?? $breakdown['labour_cost'] ?? 0, 2) }}</span>
                     </div>
                     @endif
 
-                    @if(isset($breakdown['vat_amount']))
+                    @if(isset($breakdown['vat']) || isset($breakdown['vat_amount']))
                     <div class="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2">
                         <span class="text-zinc-600">VAT ({{ number_format($breakdown['vat_rate'] ?? 20, 1) }}%)</span>
-                        <span class="font-semibold text-zinc-900">&pound;{{ number_format($breakdown['vat_amount'], 2) }}</span>
+                        <span class="font-semibold text-zinc-900">&pound;{{ number_format($breakdown['vat'] ?? $breakdown['vat_amount'] ?? 0, 2) }}</span>
                     </div>
                     @endif
                 </div>
@@ -73,10 +97,12 @@
             <div class="rounded-b-2xl bg-indigo-600 px-6 py-5">
                 <p class="text-sm font-medium text-indigo-200">Total Price</p>
                 <p class="mt-1 text-4xl font-bold tracking-tight text-white">
-                    &pound;{{ number_format($quote->total_price, 2) }}
+                    &pound;{{ number_format($quote->total_price/100, 2) }}
                 </p>
             </div>
         </div>
+
+    <livewire:quote-response :uuid="$quote->uuid" :current-status="$quote->status" />
 
         @if($quote->payment_terms)
         <div class="mt-6 rounded-xl bg-white p-5 ring-1 ring-zinc-100">
@@ -92,4 +118,5 @@
     </div>
 
 </body>
+@livewireScripts
 </html>

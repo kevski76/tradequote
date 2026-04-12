@@ -23,6 +23,12 @@ class ModuleItems extends Model
         'name', // -- "Fence Panel"
         'type', // -- material | labour
         'calculation', // -- formula | direct
+        'is_optional', // -- whether item can be toggled off in the quote form
+        'meta', // -- json field for any additional data needed for the item (e.g., dimensions, material type, etc.)
+    ];
+
+    protected $casts = [
+        'is_optional' => 'boolean', 'meta' => 'array',
     ];
 
     public function module(): BelongsTo

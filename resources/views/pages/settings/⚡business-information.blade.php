@@ -11,6 +11,8 @@ new #[Title('Business information')] class extends Component {
     public string $city = '';
     public string $postcode = '';
     public string $phone = '';
+    public string $google_review_url = '';
+    public string $feedback_notification_email = '';
 
     public function mount(): void
     {
@@ -25,6 +27,11 @@ new #[Title('Business information')] class extends Component {
                 $this->city          = $organisation->city ?? '';
                 $this->postcode      = $organisation->postcode ?? '';
                 $this->phone         = $organisation->phone ?? '';
+
+                $defaults = is_array($organisation->quote_defaults) ? $organisation->quote_defaults : [];
+                $globalDefaults = is_array($defaults['global'] ?? null) ? $defaults['global'] : [];
+                $this->google_review_url = (string) ($globalDefaults['google_review_url'] ?? '');
+                $this->feedback_notification_email = (string) ($globalDefaults['feedback_notification_email'] ?? '');
             }
         }
     }
@@ -37,6 +44,8 @@ new #[Title('Business information')] class extends Component {
             'city'          => ['nullable', 'string', 'max:100'],
             'postcode'      => ['nullable', 'string', 'max:20'],
             'phone'         => ['required', 'string', 'regex:/^[\+]?[\d\s\-\(\)\.]{7,20}$/'],
+            'google_review_url' => ['nullable', 'url', 'max:2048'],
+            'feedback_notification_email' => ['nullable', 'email', 'max:255'],
         ]);
 
         $user = Auth::user();
@@ -63,6 +72,15 @@ new #[Title('Business information')] class extends Component {
             'city'     => $validated['city'] ?? null,
             'postcode' => $validated['postcode'] ?? null,
             'phone'    => $validated['phone'],
+        ]);
+
+        $defaults = is_array($organisation->quote_defaults) ? $organisation->quote_defaults : [];
+        $defaults['global'] = is_array($defaults['global'] ?? null) ? $defaults['global'] : [];
+        $defaults['global']['google_review_url'] = trim((string) ($validated['google_review_url'] ?? ''));
+        $defaults['global']['feedback_notification_email'] = trim((string) ($validated['feedback_notification_email'] ?? ''));
+
+        $organisation->update([
+            'quote_defaults' => $defaults,
         ]);
 
         $this->dispatch('toast', message: 'Business information saved.', type: 'success');
@@ -110,6 +128,20 @@ new #[Title('Business information')] class extends Component {
                 type="tel"
                 required
                 autocomplete="tel"
+            />
+
+            <flux:input
+                wire:model="google_review_url"
+                :label="__('Google Review Link')"
+                type="url"
+                placeholder="https://g.page/r/.../review"
+            />
+
+            <flux:input
+                wire:model="feedback_notification_email"
+                :label="__('Private Feedback Email')"
+                type="email"
+                placeholder="team@yourbusiness.com"
             />
 
             <div class="flex items-center justify-end">

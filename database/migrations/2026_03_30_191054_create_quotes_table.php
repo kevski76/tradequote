@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('organisation_id')->default(0); 
             $table->unsignedBigInteger('created_by')->default(0); // user who made quote
-            $table->foreignId('module_id')->constrained()->default(0); // panel | closeboard
+            $table->foreignId('module_id')->constrained()->default(0); // Fencing, Decking, etc.
             $table->string('variant_key')->nullable();
             $table->decimal('length', 8, 2)->default(0);
             $table->string('labour_type')->nullable();

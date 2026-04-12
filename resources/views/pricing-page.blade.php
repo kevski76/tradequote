@@ -1,283 +1,325 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pricing | QuoteFlow - Professional Fencing Quotes</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Material Symbols for Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary': '#00684e',
-                        'primary-light': '#74f3c6',
-                        'surface': '#f4f7f9',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'ui-sans-serif', 'system-ui'],
-                    }
-                }
+        <title>{{ __('Welcome') }} - {{ config('app.name', 'FlashQuote') }}</title>
+
+        <link rel="icon" href="/favicon.ico" sizes="any">
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Inter+Tight:wght@300;500;600&amp;display=swap" nonce="">
+
+        <!-- Lucide Icons -->
+        <script src="https://unpkg.com/lucide@latest"></script>
+        
+        <!-- Styles -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <style>
+            body { font-family: 'Inter', sans-serif; }
+            [x-cloak] { display: none !important; }
+            .bg-emerald-gradient {
+                background: linear-gradient(135deg, #059669 0%, #10b981 100%);
             }
-        }
-    </script>
+            .reveal {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.6s ease-out;
+            }
+            .reveal.active {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        </style>
+    </head>
+    <body class="min-h-screen bg-[#f4f7f9] text-[#2b2f31] font-sans selection:bg-emerald-100 selection:text-emerald-900" x-data="{ scrolled: false, mobileMenu: false }" @scroll.window="scrolled = (window.pageYOffset > 20)">
+        {{-- Navigation --}}
+        <nav class="fixed top-0 w-full z-50 px-6 py-4">
+            <div id="welcome-nav-shell" class="max-w-5xl mx-auto bg-white/80 backdrop-blur-md shadow-xl shadow-emerald-900/5 px-4 sm:px-6 py-3 rounded-4xl border border-white/20">
+                <div class="flex justify-between items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up text-white w-5 h-5" aria-hidden="true">
+                                <path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path>
+                            </svg>
+                        </div>
+                        <a href="{{ url('/') }}">
+                            <span class="text-xl font-bold tracking-tight text-slate-900">FlashQuote</span>
+                        </a>
+                    </div>
+                
+                    <div class="hidden md:flex gap-8 items-center">
+                        <a href="{{ url('/') }}/pricing" class="text-sm font-bold text-emerald-600 border-b-2 border-emerald-500 pb-0.5">Pricing</a>
+                    </div>
 
-    <style>
-        .ai-glow {
-            background: linear-gradient(45deg, #00684e, #74f3c6);
-        }
-        /* Animation classes */
-        .reveal {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease-out;
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
-</head>
-<body class="bg-surface text-[#2b2f31] font-sans antialiased">
+                    <div class="flex items-center gap-3">
+                        <button onclick="scrollToForm()" class="hidden md:block bg-gradient-to-r cursor-pointer from-[#00684e] to-[#74f3c6] text-white px-5 py-2 rounded-full text-sm font-bold hover:scale-[1.02] transition-transform active:scale-95 shadow-lg shadow-emerald-900/10">
+                            Get Early Access
+                        </button>
+                        <button
+                            id="welcome-mobile-menu-toggle"
+                            type="button"
+                            class="md:hidden inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-colors hover:border-emerald-200 hover:text-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            aria-expanded="false"
+                            aria-controls="welcome-mobile-menu"
+                            aria-label="Open navigation menu"
+                        >
+                            <svg id="welcome-mobile-menu-open-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5" aria-hidden="true">
+                                <line x1="4" x2="20" y1="12" y2="12"></line>
+                                <line x1="4" x2="20" y1="6" y2="6"></line>
+                                <line x1="4" x2="20" y1="18" y2="18"></line>
+                            </svg>
+                            <svg id="welcome-mobile-menu-close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden h-5 w-5" aria-hidden="true">
+                                <path d="M18 6 6 18"></path>
+                                <path d="m6 6 12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
 
-    <!-- Navigation -->
-    <header class="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl rounded-full px-6 py-3 z-50 bg-white/80 backdrop-blur-xl shadow-[0_12px_24px_rgba(0,104,78,0.08)] flex justify-between items-center transition-all duration-300">
-        <div class="text-xl font-extrabold tracking-tighter text-primary">
-            QuoteFlow
-        </div>
-        <nav class="hidden md:flex items-center gap-8">
-            <a href="#features" class="text-sm font-semibold hover:text-primary transition-colors">Features</a>
-            <a href="#how-it-works" class="text-sm font-semibold hover:text-primary transition-colors">How it Works</a>
-            <a href="#pricing" class="text-sm font-semibold text-primary border-b-2 border-primary pb-1">Pricing</a>
+                <div id="welcome-mobile-menu" class="hidden md:hidden pt-4">
+                    <div class="rounded-3xl border border-emerald-100 bg-white px-5 py-5 shadow-lg shadow-emerald-900/5">
+                        <div class="flex flex-col gap-4">
+                            <a href="#" class="text-sm font-bold text-emerald-600" data-mobile-nav-link>Pricing</a>
+                        </div>
+                        <button onclick="scrollToForm()" class="mt-5 w-full bg-linear-to-r cursor-pointer from-[#00684e] to-[#74f3c6] cursor-pointer text-white px-5 py-3 rounded-full text-sm font-bold shadow-lg shadow-emerald-900/10">
+                            Get Early Access
+                        </button>
+                    </div>
+                </div>
+            </div>
         </nav>
-        <button class="bg-primary text-white px-6 py-2 rounded-full font-bold text-sm tracking-tight shadow-lg shadow-primary/20 transition-transform hover:scale-105 active:scale-95">
-            Get Early Access
-        </button>
-    </header>
 
-    <main>
-        <!-- Hero Section -->
-        <section class="pt-40 pb-20 px-6">
-            <div class="max-w-4xl mx-auto text-center">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#74f3c6]/30 text-primary text-xs font-bold mb-6 uppercase tracking-widest reveal">
-                    <span class="material-symbols-outlined text-sm">timer</span> Speed is the new professional
+        <main>
+            <!-- Hero Section -->
+            <section class="pt-40 pb-20 px-6">
+                <div class="max-w-4xl mx-auto text-center">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#74f3c6]/30 text-primary text-xs font-bold mb-6 uppercase tracking-widest reveal">
+                        Pricing built for trades.
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter text-[#2b2f31] mb-6 leading-[0.95] reveal">
+                        Simple Pricing That <span class="text-[#00684e] italic">Pays for Itself.</span>
+                    </h1>
+                    <p class="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto mb-10 leading-tight reveal">
+                        One job covers your monthly cost. No complex tiers, just everything you need to grow your business.
+                    </p>
                 </div>
-                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter text-[#2b2f31] mb-6 leading-[0.95] reveal">
-                    Win the job before you leave the driveway.
-                </h1>
-                <p class="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed reveal">
-                    Create professional fencing quotes in under 60 seconds — no paperwork, no delays.
-                </p>
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 reveal">
-                    <button class="ai-glow text-white px-8 py-4 rounded-xl font-bold text-lg shadow-xl shadow-primary/20 transition-transform hover:scale-105 active:scale-95">
-                        Start 7-Day Free Trial
+            </section>
+
+            <!-- Pricing Bento Grid -->
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
+                <!-- Main Plan Card -->
+                <div class="md:col-span-7 lg:col-span-8 bg-white rounded-[2rem] p-8 md:p-12 shadow-xl shadow-primary/5 relative overflow-hidden flex flex-col justify-between group">
+                    <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rotate-12 group-hover:rotate-0 transition-transform duration-700 text-primary"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                    </div>
+                    
+                    <div>
+                        <h2 class="font-bold text-3xl mb-2">FlashQuote</h2>
+                        <div class="flex items-baseline gap-2 mb-8">
+                            <span class="text-5xl font-extrabold tracking-tighter text-on-surface">£20</span>
+                            <span class="text-on-surface-variant font-medium">/ month</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 mb-12">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-[#c0f5e4] p-1 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-[#00684e]"><polyline points="20 6 9 17 4 12"/></svg>
+                                </div>
+                                <span class="font-label font-semibold text-on-surface-variant text-sm">Send quotes in minutes</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="bg-[#c0f5e4] p-1 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-[#00684e]"><polyline points="20 6 9 17 4 12"/></svg>
+                                </div>
+                                <span class="font-label font-semibold text-on-surface-variant text-sm">Track jobs simply</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="bg-[#c0f5e4] p-1 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-[#00684e]"><polyline points="20 6 9 17 4 12"/></svg>
+                                </div>
+                                <span class="font-label font-semibold text-on-surface-variant text-sm">Automatic review requests</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="bg-[#c0f5e4] p-1 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-[#00684e]"><polyline points="20 6 9 17 4 12"/></svg>
+                                </div>
+                                <span class="font-label font-semibold text-on-surface-variant text-sm">Follow-up reminders</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="bg-[#c0f5e4] p-1 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><polyline points="20 6 9 17 4 12"/></svg>
+                                </div>
+                                <span class="font-label font-semibold text-on-surface-variant text-sm">Unlimited jobs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center gap-6 pt-8 border-t border-surface-container">
+                        <button class="w-full sm:w-auto bg-[#00684e] text-[#c6ffe6] px-8 py-4 rounded-xl font-bold text-lg shadow-xl shadow-primary/10 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] transition-all">
+                            Start Free Early Access
+                        </button>
+                        <p class="text-sm text-on-surface-variant font-label italic">No payment required today</p>
+                    </div>
+                </div>
+
+                <!-- Founder Offer Card -->
+                <div class="md:col-span-5 lg:col-span-4 bg-[#0b0f10] rounded-[2rem] p-8 md:p-10 flex flex-col justify-between text-white shadow-2xl relative overflow-hidden">
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-primary/20 blur-[80px] rounded-full"></div>
+                    
+                    <div>
+                        <div class="bg-[#09221e] text-[#74f3c6] inline-block px-3 py-1 rounded-full font-label text-[10px] uppercase tracking-widest font-bold mb-6">Founder Offer</div>
+                        <h3 class="text-2xl font-bold mb-4">Early Access Pricing</h3>
+                        <div class="flex items-baseline gap-2 mb-6">
+                            <span class="text-4xl font-extrabold tracking-tighter">£10</span>
+                            <span class="text-white/60 font-medium">/ month</span>
+                        </div>
+                        <p class="text-sm leading-relaxed mb-8 text-white/70">
+                            For early users helping shape the product. Lock in this price for life while we're in early access.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex gap-3 items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#74f3c6]"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11 11 13 15 9"/></svg>
+                            <p class="text-sm font-medium text-white/90">Life-time price lock</p>
+                        </div>
+                        <div class="flex gap-3 items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#74f3c6]"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            <p class="text-sm font-medium text-white/90">Direct access to founders</p>
+                        </div>
+                        <div class="flex gap-3 items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#74f3c6]"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                            <p class="text-sm font-medium text-white/90">Priority feature requests</p>
+                        </div>
+                    </div>
+
+                    <button class="mt-10 w-full border border-[#74f3c6] text-[#74f3c6] px-6 py-3 rounded-xl font-bold text-sm hover:bg-[#005a43] transition-all">
+                        Claim Founder Access
                     </button>
-                    <div class="flex items-center gap-2 text-gray-500 font-semibold text-sm">
-                        <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1">check_circle</span>
-                        No credit card required
-                    </div>
                 </div>
             </div>
-        </section>
 
-        <!-- Features Grid -->
-        <section id="features" class="pb-20 px-6">
-            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6">
-                @php
-                    $features = [
-                        ['icon' => 'shutter_speed', 'title' => 'On-site speed', 'desc' => 'Quote jobs on-site in under 1 minute. No more evening admin.'],
-                        ['icon' => 'calculate', 'title' => 'Auto calculations', 'desc' => 'Automatically calculate materials + labour costs instantly.'],
-                        ['icon' => 'send', 'title' => 'Instant Delivery', 'desc' => 'Send professional quotes instantly via WhatsApp or Email.'],
-                        ['icon' => 'content_copy', 'title' => 'Smart Templates', 'desc' => 'Save repeat jobs as templates to save even more time.']
-                    ];
-                @endphp
+            <!-- Risk Reversal Section -->
+            <section class="max-w-5xl mx-auto mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-[#edf1f3] p-8 rounded-2xl flex flex-col items-center text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#00684e] mb-4"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="10" y1="14" x2="14" y2="18"/><line x1="14" y1="14" x2="10" y2="18"/></svg>
+                    <h4 class="font-bold text-lg mb-2">Cancel anytime</h4>
+                    <p class="text-sm text-[#585c5e]">No long-term commitments. Stay because you love us, not because you have to.</p>
+                </div>
+                <div class="bg-[#edf1f3] p-8 rounded-2xl flex flex-col items-center text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#00684e] mb-4"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="m9 15 2 2 4-4"/></svg>
+                    <h4 class="font-bold text-lg mb-2">No contracts</h4>
+                    <p class="text-sm text-[#585c5e]">Simple, month-to-month billing. Honest service for honest tradespeople.</p>
+                </div>
+                <div class="bg-[#edf1f3] p-8 rounded-2xl flex flex-col items-center text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#00684e] mb-4"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    <h4 class="font-bold text-lg mb-2">No setup fees</h4>
+                    <p class="text-sm text-[#585c5e]">Get started for £0. We help you import your contacts and templates for free.</p>
+                </div>
+            </section>
 
-                @foreach($features as $feature)
-                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 reveal">
-                    <div class="w-12 h-12 rounded-2xl bg-[#74f3c6]/20 flex items-center justify-center text-primary mb-6">
-                        <span class="material-symbols-outlined">{{ $feature['icon'] }}</span>
+            <!-- Value Section -->
+            <section class="max-w-6xl mx-auto mt-32 relative">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div class="relative rounded-[2.5rem] overflow-hidden aspect-video shadow-2xl">
+                        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhToZY-5AnaWeQAZG3Yx7pGtwwIeNjD0qxZhVEdT8nYjxuqPaIS1jzUAl03sQaDKVsZXuqmD-6YVeGQ_w7pdtn_N0e-HvYewqXJ_Hb0haFnTCVJf408SzSJA0b9qVl-iwdi1uH_Eoa2j275ZpyTDs0UdrNFZTwY1VKZoeDk3b6xMVZoR1L8Uwl3OxA1yyux0QDD7gYs2KoKlFoSCFqyySnm7wYJRpR59kJzhxTe8CCNlQWMcBZntYGkyBde7LXJhJhtpB6qL3fC_SN" alt="Modern tradesperson">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent"></div>
+                        <div class="absolute bottom-8 left-8 bg-white/90 backdrop-blur p-6 rounded-2xl max-w-xs shadow-xl">
+                            <div class="flex items-center gap-1 text-primary mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-[#00684e]"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-[#00684e]"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-[#00684e]"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-[#00684e]"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-[#00684e]"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            </div>
+                            <p class="text-sm italic text-on-surface">"Won two boiler installs in my first week because I sent the quote before leaving their driveway."</p>
+                            <p class="text-xs font-bold font-label mt-3 text-[#00684e] uppercase tracking-widest">— Dave, Gas Engineer</p>
+                        </div>
                     </div>
-                    <h3 class="font-bold text-lg mb-2">{{ $feature['title'] }}</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed">{{ $feature['desc'] }}</p>
-                </div>
-                @endforeach
-            </div>
-        </section>
 
-        <!-- Pricing Section -->
-        <section id="pricing" class="py-24 px-6 bg-[#edf1f3]">
-            <div class="max-w-7xl mx-auto">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl font-extrabold tracking-tight mb-4 reveal">Simple, Fair Pricing</h2>
-                    <p class="text-gray-500 font-semibold reveal">Everything you need to grow your fencing business.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-end">
-                    <!-- Solo Plan -->
-                    <div class="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 flex flex-col h-full reveal">
-                        <div class="mb-8">
-                            <h3 class="text-xl font-bold mb-2">SOLO</h3>
-                            <p class="text-gray-500 text-sm font-semibold mb-6">For individual trades</p>
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-4xl font-extrabold">£29</span>
-                                <span class="text-gray-500 font-semibold">/mo</span>
+                    <div>
+                        <h2 class="text-4xl font-extrabold text-on-surface tracking-tight mb-8">Why it’s worth it</h2>
+                        <div class="space-y-10">
+                            <div class="flex gap-6">
+                                <div class="bg-[#c0f5e4] w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#00684e]"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                                </div>
+                                <div>
+                                    <h5 class="text-xl font-bold mb-2">Win 1 Extra Job</h5>
+                                    <p class="text-on-surface-variant leading-relaxed">Most trades win an extra job worth £500+ every month just by responding faster than the competition. QuoteFlow pays for itself 25x over.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-6">
+                                <div class="bg-[#c0f5e4] w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#00684e]"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                </div>
+                                <div>
+                                    <h5 class="text-xl font-bold mb-2">Better Reviews</h5>
+                                    <p class="text-on-surface-variant leading-relaxed">Automated review requests help you build a 5-star reputation on Google and Checkatrade. More trust means you can charge more per job.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-6">
+                                <div class="bg-[#c0f5e4] w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#00684e]"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                </div>
+                                <div>
+                                    <h5 class="text-xl font-bold mb-2">Save 5+ Hours Weekly</h5>
+                                    <p class="text-on-surface-variant leading-relaxed">Stop spending your evenings on paperwork. Our templates let you send professional quotes in 90 seconds. Reclaim your weekends.</p>
+                                </div>
                             </div>
                         </div>
-                        <ul class="space-y-4 mb-10 flex-grow">
-                            <li class="flex items-center gap-3 text-sm font-semibold"><span class="material-symbols-outlined text-primary text-lg">check</span> 1 trade module (Fencing)</li>
-                            <li class="flex items-center gap-3 text-sm font-semibold"><span class="material-symbols-outlined text-primary text-lg">check</span> Up to 5 templates</li>
-                            <li class="flex items-center gap-3 text-sm font-semibold"><span class="material-symbols-outlined text-primary text-lg">check</span> PDF quotes</li>
-                            <li class="flex items-center gap-3 text-sm font-semibold"><span class="material-symbols-outlined text-primary text-lg">check</span> Basic branding</li>
-                        </ul>
-                        <button class="w-full py-4 rounded-xl font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all duration-200 active:scale-95">
-                            Start Free Trial
-                        </button>
-                    </div>
-
-                    <!-- Pro Plan -->
-                    <div class="bg-[#0b0f10] p-10 rounded-[2.5rem] shadow-2xl shadow-primary/10 relative transform md:scale-105 z-10 flex flex-col reveal">
-                        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary-light text-primary text-[10px] font-extrabold tracking-widest uppercase px-4 py-1.5 rounded-full">
-                            MOST POPULAR
-                        </div>
-                        <div class="mb-8">
-                            <h3 class="text-xl font-bold mb-2 text-white">PRO</h3>
-                            <p class="text-gray-400 text-sm font-semibold mb-6">For growing businesses</p>
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-5xl font-extrabold text-white">£59</span>
-                                <span class="text-gray-400 font-semibold">/mo</span>
-                            </div>
-                        </div>
-                        <ul class="space-y-4 mb-10 flex-grow">
-                            <li class="flex items-center gap-3 text-sm font-semibold text-white"><span class="material-symbols-outlined text-primary-light text-lg">verified</span> Unlimited modules</li>
-                            <li class="flex items-center gap-3 text-sm font-semibold text-white"><span class="material-symbols-outlined text-primary-light text-lg">verified</span> Unlimited templates</li>
-                            <li class="flex items-center gap-3 text-sm font-semibold text-white"><span class="material-symbols-outlined text-primary-light text-lg">verified</span> Full branding (logo, colours)</li>
-                            <li class="flex items-center gap-3 text-sm font-semibold text-white"><span class="material-symbols-outlined text-primary-light text-lg">verified</span> Faster quoting workflow</li>
-                        </ul>
-                        <button class="w-full py-4 rounded-xl font-bold ai-glow text-white shadow-lg shadow-primary/20 transition-transform hover:scale-105 active:scale-95">
-                            Start Free Trial
-                        </button>
-                    </div>
-
-                    <!-- Authority Plan -->
-                    <div class="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 flex flex-col h-full reveal">
-                        <div class="mb-8">
-                            <h3 class="text-xl font-bold mb-2">AUTHORITY</h3>
-                            <p class="text-gray-500 text-sm font-semibold mb-6">For business growth</p>
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-4xl font-extrabold">£199</span>
-                                <span class="text-gray-500 font-semibold">/mo</span>
-                            </div>
-                        </div>
-                        <ul class="space-y-4 mb-10 flex-grow">
-                            <li class="flex items-center gap-3 text-sm font-semibold"><span class="material-symbols-outlined text-primary text-lg">check</span> Everything in Pro</li>
-                            <li class="flex items-center gap-3 text-sm font-semibold"><span class="material-symbols-outlined text-primary text-lg">check</span> Google review automation</li>
-                            <li class="flex items-center gap-3 text-sm font-semibold"><span class="material-symbols-outlined text-primary text-lg">check</span> Google Business posting</li>
-                            <li class="flex items-center gap-3 text-sm font-semibold"><span class="material-symbols-outlined text-primary text-lg">check</span> Done-for-you growth tools</li>
-                        </ul>
-                        <button class="w-full py-4 rounded-xl font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all duration-200 active:scale-95">
-                            Start Free Trial
-                        </button>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Trust Section -->
-        <section class="py-20 px-6">
-            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center items-center">
-                <div class="flex flex-col items-center reveal">
-                    <span class="material-symbols-outlined text-3xl text-primary mb-4">location_on</span>
-                    <p class="font-bold text-xl text-[#2b2f31]">Built for UK trades</p>
+            <!-- Final CTA Section -->
+            <section class="max-w-5xl mx-auto mt-40 mb-20 text-center bg-gradient-to-br from-[#def7f0] to-[#e4e9eb] p-12 md:p-20 rounded-[3rem] border border-primary-container/30 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-10">
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border-[1px] border-primary rounded-full"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border-[1px] border-primary rounded-full"></div>
                 </div>
-                <div class="flex flex-col items-center reveal">
-                    <span class="material-symbols-outlined text-3xl text-primary mb-4">verified_user</span>
-                    <p class="font-bold text-xl text-[#2b2f31]">No contracts — cancel anytime</p>
+                
+                <h2 class="text-4xl md:text-5xl font-extrabold text-on-surface mb-8 tracking-tighter">Ready to streamline your business?</h2>
+                <p class="text-xl text-on-surface-variant mb-12 max-w-2xl mx-auto">Join hundreds of tradespeople winning more work with less stress. Free trial, no strings attached.</p>
+                
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+                    <button class="bg-[#00684e] text-[#c6ffe6] px-10 py-5 rounded-full font-bold text-xl shadow-2xl shadow-primary/20 hover:scale-105 hover:-translate-y-1 transition-all">
+                        Start Free Early Access
+                    </button>
                 </div>
-                <div class="flex flex-col items-center reveal">
-                    <span class="material-symbols-outlined text-3xl text-primary mb-4">group</span>
-                    <p class="font-bold text-xl text-[#2b2f31]">Used by local fencing contractors</p>
-                </div>
-            </div>
-        </section>
+                <p class="mt-8 text-sm font-label font-bold text-primary tracking-widest uppercase">Limited time founder pricing available</p>
+            </section>
+        </main>
 
-        <!-- FAQ Section -->
-        <section class="py-24 px-6 bg-white">
-            <div class="max-w-4xl mx-auto">
-                <h2 class="text-3xl font-extrabold tracking-tight mb-12 text-center reveal">Frequently Asked Questions</h2>
-                <div class="grid gap-6">
-                    <div class="bg-[#f4f7f9] p-8 rounded-2xl reveal">
-                        <h4 class="text-lg font-bold mb-3 flex items-center gap-3 text-[#2b2f31]">
-                            <span class="material-symbols-outlined text-primary">help</span>
-                            Will this actually save me time?
-                        </h4>
-                        <p class="text-gray-600 font-semibold leading-relaxed">
-                            Most users create quotes in under 60 seconds after setup. The system calculates everything automatically so you just plug in the measurements and go.
-                        </p>
-                    </div>
-                    <div class="bg-[#f4f7f9] p-8 rounded-2xl reveal">
-                        <h4 class="text-lg font-bold mb-3 flex items-center gap-3 text-[#2b2f31]">
-                            <span class="material-symbols-outlined text-primary">psychology</span>
-                            Do I need to be techy?
-                        </h4>
-                        <p class="text-gray-600 font-semibold leading-relaxed">
-                            No — if you can use WhatsApp, you can use this. We designed the interface to be as simple as possible for working professionals on site.
-                        </p>
-                    </div>
+        {{-- Footer --}}
+        <footer class="bg-slate-50 py-8 px-8 border-t border-slate-200">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+                <div class="text-lg font-bold text-emerald-900">FlashQuote</div>
+                <div class="text-xs font-bold uppercase tracking-widest text-slate-400">
+                    © {{ date('Y') }} FlashQuote. All rights reserved.
                 </div>
             </div>
-        </section>
+        </footer>
 
-        <!-- Final CTA -->
-        <section class="py-24 px-6">
-            <div class="max-w-7xl mx-auto relative overflow-hidden rounded-[3rem] bg-[#0b0f10] p-12 md:p-24 text-center reveal">
-                <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 20% 50%, #74f3c6 0%, transparent 40%)"></div>
-                <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tighter relative z-10">Ready to stop working evenings?</h2>
-                <p class="text-gray-400 text-lg mb-10 max-w-xl mx-auto font-semibold relative z-10">Join hundreds of fencing contractors who are winning more jobs with professional, instant quotes.</p>
-                <button class="ai-glow text-white px-10 py-5 rounded-2xl font-bold text-xl shadow-2xl shadow-primary/30 relative z-10 transition-transform hover:scale-105 active:scale-95">
-                    Start Your 7-Day Free Trial
-                </button>
-            </div>
-        </section>
-    </main>
+        <!-- Scroll Animation Script -->
+        <script>
+            const observerOptions = {
+                threshold: 0.1
+            };
 
-    <!-- Footer -->
-    <footer class="bg-[#f4f7f9] w-full py-12 px-8 border-t border-primary/10">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="text-lg font-bold text-[#2b2f31]">QuoteFlow</div>
-            <div class="flex gap-8">
-                <a href="#" class="text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-all duration-200 font-semibold text-sm">Terms</a>
-                <a href="#" class="text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-all duration-200 font-semibold text-sm">Privacy</a>
-                <a href="#" class="text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-all duration-200 font-semibold text-sm">Twitter</a>
-                <a href="#" class="text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-all duration-200 font-semibold text-sm">LinkedIn</a>
-            </div>
-            <div class="text-gray-400 font-semibold text-sm">© 2024 QuoteFlow. All rights reserved.</div>
-        </div>
-    </footer>
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
 
-    <!-- Scroll Animation Script -->
-    <script>
-        const observerOptions = {
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-    </script>
-</body>
+            document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+        </script>
+    </body>
 </html>

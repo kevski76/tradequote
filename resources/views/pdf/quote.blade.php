@@ -275,32 +275,38 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach ($breakdown['items'] ?? [] as $item)
                 <tr>
-                    <td>Fence Posts</td>
-                    <td class="align-right">{{ number_format($breakdown['posts_qty']) }}</td>
-                    <td class="align-right">&pound;{{ number_format($breakdown['posts_price'], 2) }}</td>
+                    <td>{{ $item['name'] }}</td>
+                    <td class="align-right">{{ number_format($item['quantity'], 2) }}</td>
+                    <td class="align-right">&pound;{{ number_format($item['total'], 2) }}</td>
                 </tr>
+                @endforeach
+                @if (($breakdown['waste'] ?? 0) > 0)
                 <tr>
-                    <td>Timber Boards / Panels</td>
-                    <td class="align-right">{{ number_format($breakdown['boards_qty']) }}</td>
-                    <td class="align-right">&pound;{{ number_format($breakdown['boards_price'], 2) }}</td>
+                    <td>Waste allowance ({{ number_format($breakdown['waste'], 2) }}%)</td>
+                    <td class="align-right">-</td>
+                    <td class="align-right">&pound;{{ number_format($breakdown['waste_amount'] ?? 0, 2) }}</td>
                 </tr>
+                @endif
+                @if (($breakdown['markup'] ?? 0) > 0)
                 <tr>
-                    <td>Labour</td>
-                    <td class="align-right">{{ rtrim(rtrim(number_format($breakdown['length'], 2, '.', ''), '0'), '.') }}m</td>
-                    <td class="align-right">&pound;{{ number_format($breakdown['labour_cost'], 2) }}</td>
+                    <td>Markup ({{ number_format($breakdown['markup'], 2) }}%)</td>
+                    <td class="align-right">-</td>
+                    <td class="align-right">&pound;{{ number_format($breakdown['markup_amount'] ?? 0, 2) }}</td>
                 </tr>
+                @endif
                 <tr>
                     <td>VAT ({{ number_format($breakdown['vat_rate'], 2) }}%)</td>
                     <td class="align-right">-</td>
-                    <td class="align-right">&pound;{{ number_format($breakdown['vat_amount'], 2) }}</td>
+                    <td class="align-right">&pound;{{ number_format($breakdown['vat'] ?? 0, 2) }}</td>
                 </tr>
             </tbody>
         </table>
 
         <div class="total-wrap">
             <div class="total-label">Total Price</div>
-            <p class="total-price">&pound;{{ number_format($breakdown['total_price'], 2) }}</p>
+            <p class="total-price">&pound;{{ number_format($breakdown['total'] ?? 0, 2) }}</p>
         </div>
     </section>
 

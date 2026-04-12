@@ -19,6 +19,8 @@
         </a>
     </section>
 
+    <livewire:notification-list />
+
     <section class="grid grid-cols-1 gap-4 md:grid-cols-3">
         <article class="rounded-xl bg-white p-5 shadow-sm ring-1 ring-zinc-100 dark:bg-zinc-900 dark:ring-zinc-800">
             <p class="text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Quotes This Week</p>
@@ -27,7 +29,7 @@
 
         <article class="rounded-xl bg-white p-5 shadow-sm ring-1 ring-zinc-100 dark:bg-zinc-900 dark:ring-zinc-800">
             <p class="text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Total Value Quoted (&pound;)</p>
-            <p class="mt-2 text-3xl font-semibold text-zinc-900 dark:text-zinc-100">&pound;{{ number_format($totalValueQuoted, 0) }}</p>
+            <p class="mt-2 text-3xl font-semibold text-zinc-900 dark:text-zinc-100">&pound;{{ number_format($totalValueQuoted, 2) }}</p>
         </article>
 
         <article class="rounded-xl bg-white p-5 shadow-sm ring-1 ring-zinc-100 dark:bg-zinc-900 dark:ring-zinc-800">
@@ -74,15 +76,17 @@
                                     <p class="font-medium text-zinc-900 dark:text-zinc-100">{{ $quote['job_name'] }}</p>
                                     <p class="text-xs text-zinc-500 dark:text-zinc-400">{{ $quote['customer_name'] }}</p>
                                 </td>
-                                <td class="px-4 py-4 font-medium text-zinc-900 dark:text-zinc-100">&pound;{{ number_format($quote['total_price'], 0) }}</td>
+                                <td class="px-4 py-4 font-medium text-zinc-900 dark:text-zinc-100">&pound;{{ number_format($quote['total_price'], 2) }}</td>
                                 <td class="px-4 py-4">
                                     <span @class([
                                         'inline-flex rounded-full px-2.5 py-1 text-xs font-semibold',
                                         'bg-zinc-100 text-zinc-700 dark:bg-zinc-700/60 dark:text-zinc-100' => $quote['status'] === 'draft',
                                         'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300' => $quote['status'] === 'sent',
                                         'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300' => $quote['status'] === 'accepted',
+                                        'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300' => $quote['status'] === 'declined',
+                                        'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300' => $quote['status'] === 'work_complete',
                                     ])>
-                                        {{ ucfirst($quote['status']) }}
+                                        {{ ucfirst(str_replace('_', ' ', $quote['status'])) }}
                                     </span>
                                 </td>
                                 <td class="px-4 py-4 text-zinc-600 dark:text-zinc-300">{{ optional($quote['created_at'])->format('d M Y') }}</td>
@@ -135,7 +139,7 @@
     </section>
 
     @if (! $isPro)
-        <section x-data="{ open: true }" x-show="open" class="rounded-xl border border-indigo-200 bg-indigo-50 p-5 shadow-sm dark:border-indigo-500/30 dark:bg-indigo-500/10">
+        <section x-data="{ open: false }" x-show="open" class="rounded-xl border border-indigo-200 bg-indigo-50 p-5 shadow-sm dark:border-indigo-500/30 dark:bg-indigo-500/10">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <p class="text-sm font-medium text-indigo-900 dark:text-indigo-100">Add your logo to quotes</p>
                 <div class="flex items-center gap-2">
@@ -156,5 +160,5 @@
                 </div>
             </div>
         </section>
-    @endif
+    @endif 
 </div>

@@ -13,7 +13,20 @@
             <flux:sidebar.nav>
                 <flux:sidebar.group :heading="__('Platform')" class="grid">
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard') }}
+                        <span class="flex items-center gap-2">
+                            {{ __('Dashboard') }}
+                            @auth
+                                @php $sidebarUnreadCount = auth()->user()->unreadNotifications()->count(); @endphp
+                                @if ($sidebarUnreadCount > 0)
+                                    <span class="inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-red-600 px-1 text-xs font-bold text-white">
+                                        {{ $sidebarUnreadCount > 99 ? '99+' : $sidebarUnreadCount }}
+                                    </span>
+                                @endif
+                            @endauth
+                        </span>
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="chat-bubble-left-right" :href="route('feedback.index')" :current="request()->routeIs('feedback.index')" wire:navigate>
+                        {{ __('Private Feedback') }}
                     </flux:sidebar.item>
                     <flux:sidebar.item icon="cog" :href="route('profile.edit')" :current="request()->routeIs('profile.edit')" wire:navigate>
                         {{ __('Settings') }}

@@ -40,10 +40,10 @@
                             type="text"
                             placeholder="John Doe"
                             autocomplete="name"
-                            class="w-full bg-slate-50 rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all border @error('name') border-red-400 bg-red-50 @else border-transparent @enderror"
+                            class="w-full bg-slate-50 rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all border @error('name') border-red-700 bg-red-50 @else border-transparent @enderror"
                         >
                         @error('name')
-                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                            <p class="text-xs text-red-700 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="space-y-2">
@@ -54,10 +54,10 @@
                             type="text"
                             placeholder="JD Fencing Ltd"
                             autocomplete="organization"
-                            class="w-full bg-slate-50 rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all border @error('business_name') border-red-400 bg-red-50 @else border-transparent @enderror"
+                            class="w-full bg-slate-50 rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all border @error('business_name') border-red-700 bg-red-50 @else border-transparent @enderror"
                         >
                         @error('business_name')
-                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                            <p class="text-xs text-red-700 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
@@ -70,10 +70,10 @@
                         type="email"
                         placeholder="john@example.com"
                         autocomplete="email"
-                        class="w-full bg-slate-50 rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all border @error('email') border-red-400 bg-red-50 @else border-transparent @enderror"
+                        class="w-full bg-slate-50 rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all border @error('email') border-red-700 bg-red-50 @else border-transparent @enderror"
                     >
                     @error('email')
-                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        <p class="text-xs text-red-700 mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -87,7 +87,7 @@
                         class="w-full bg-slate-50 border border-transparent rounded-xl p-4 focus:ring-2 focus:ring-emerald-500 outline-none transition-all resize-none"
                     ></textarea>
                     @error('quoting_method')
-                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        <p class="text-xs text-red-700 mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 

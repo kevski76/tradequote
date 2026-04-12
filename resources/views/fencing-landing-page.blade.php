@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuoteFlow | High-Speed Fencing Quotes</title>
+    <title>FlashQuote | High-Speed Fencing Quotes</title>
 
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -15,7 +15,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
     <style>
         body { font-family: 'Inter', sans-serif; }
         [x-cloak] { display: none !important; }
@@ -31,6 +30,10 @@
             opacity: 1;
             transform: translateY(0);
         }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+        }
     </style>
 </head>
 <body class="min-h-screen bg-[#f4f7f9] text-[#2b2f31] font-sans selection:bg-emerald-100 selection:text-emerald-900" x-data="{ scrolled: false, mobileMenu: false }" @scroll.window="scrolled = (window.pageYOffset > 20)">
@@ -44,13 +47,15 @@
                             <path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path>
                         </svg>
                     </div>
-                    <span class="text-xl font-bold tracking-tight text-slate-900">QuoteFlow</span>
+                    <a href="{{ url('/') }}">
+                        <span class="text-xl font-bold tracking-tight text-slate-900">FlashQuote</span>
+                    </a>
                 </div>
             
                 <div class="hidden md:flex gap-8 items-center">
                     <a href="#" class="text-sm font-bold text-emerald-600 border-b-2 border-emerald-500 pb-0.5">Features</a>
-                    <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">How it Works</a>
-                    <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">Pricing</a>
+                    <a href="" onclick="scrollToHowItWorks(event)" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">How it Works</a>
+                    <a href="{{ url('/') }}/pricing" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">Pricing</a>
                 </div>
 
                 <div class="flex items-center gap-3">
@@ -93,23 +98,34 @@
         </div>
     </nav>
 
-    <main class="pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
+    <main class="pt-32 md:pt-48 overflow-hidden">
         <!-- Hero Section -->
-        <section class="max-w-7xl mx-auto px-6">
+        <section class="max-w-7xl mx-auto pb-20 px-6">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div class="max-w-2xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-bold mb-6 tracking-wide uppercase text-xs font-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rocket"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-5c1.62-2.2 5-3 5-3"/><path d="M12 15v5s3.03-.55 5-2c2.2-1.62 3-5 3-5"/></svg>
+                        Fencing Contractors First
+                    </div>
                     <h1 class="text-5xl md:text-7xl font-black tracking-tighter leading-[0.95] mb-8">
-                        Quote fencing jobs before you leave the <span class="text-emerald-600">driveway</span>
+                        Get More Fencing Jobs With <span class="text-emerald-600">Faster Quotes</span>
                     </h1>
                     <p class="text-xl text-slate-600 leading-relaxed mb-10 max-w-lg">
-                        Measure the job, generate the price, and send a professional quote in under 60 seconds.
+                        Send quotes in minutes and automatically ask for 5-star reviews after every job — no chasing, no extra admin.
                     </p>
                     
                     <div class="flex flex-col sm:flex-row gap-4 mb-12">
                         <button onclick="scrollToForm()" class="bg-gradient-to-r from-[#00684e] to-[#74f3c6] cursor-pointer text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-emerald-900/20 
                         hover:scale-[1.02] transition-all hover:shadow-emerald-900/30">
-                            Get early access (free)
+                            Get Free Early Access
                         </button>
+                        <div class="flex items-center gap-3 px-4">
+                            <div class="flex -space-x-2">
+                                <img class="w-8 h-8 rounded-full border-2 border-background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAzPeG4-BrXyROTT3iY5TBe7jmOYcfbtF9apSNmcC9QSbNVggZu-quK1FMIbZIy67KyVCHl3qunXTmYJZygBwGokJAhHAgmfBM3W39x6TAqrkM2r3kI3qUZB979HOHlgPEtovRhynJmIVqIEWpQ1EzV4us6sKLrXIXa8-s1DT3XCaRlHFwXmPQ2Tl7xYba4d_9eXKt2WViW2xLjx2a-4NQ8nU9ar9jw4EaODt61hizM9BNrPu2Xtr3E-eWw6oEXNL4KS7uothCkm7R" alt="Contractor 1" referrerPolicy="no-referrer">
+                                <img class="w-8 h-8 rounded-full border-2 border-background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHtaAJYg_514-zLOWcZ4Myv1EfZhhN-IW_QIA_vWRuPM3to0QhoVYXpJn72NZ_ykmNtBQ1hBtJ6QzvVUHd5EvWprTYmpFQ1bnkG6uNYZIN610JEmGMbVMrgZc_bqd7nX76Narpx_UfFaz2JiZ6ppKNbjH_6sWb7PQ8tsMczWOD2YRAO-yE4LcmPW-D-UGoXeRTG7c2SRA-Q5aJlruDL7f2KwvUpSFxoqjHgJhJKPetChzGVdjK7iCcUVMB8xmPjqgzklsj4oSv3b29" alt="Contractor 2" referrerPolicy="no-referrer">
+                            </div>
+                            <span class="text-xs font-label text-on-surface-variant font-bold leading-none">Joined by 20+ local contractors</span>
+                        </div>
                         <!--
                         <button class="bg-slate-100 text-slate-900 px-8 py-4 rounded-xl font-bold text-lg transition-all hover:bg-slate-200 active:scale-95">
                             Get early access (free)
@@ -143,6 +159,190 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Problem Section -->
+        <section class="py-24 px-6 bg-[#eef1f3]">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl lg:text-5xl font-extrabold text-on-surface tracking-tight mb-4">You’re probably losing jobs without realising it</h2>
+                    <div class="w-20 h-1.5 bg-emerald-700 mx-auto rounded-full"></div>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    @php
+                        $problems = [
+                            ['icon' => 'timer', 'title' => 'Quotes take too long', 'desc' => "Spent your whole evening at the laptop instead of with your family? That's profit leaking away."],
+                            ['icon' => 'zap', 'title' => 'Slow replies lose work', 'desc' => "Customers go with whoever replies first. If you're not fast, you're last."],
+                            ['icon' => 'bell', 'title' => 'Forgotten reviews', 'desc' => "You finish the job, say goodbye, and forget to ask. That's a missed marketing opportunity."],
+                            ['icon' => 'users', 'title' => 'Competitors winning', 'desc' => "The guy with 50 reviews will always win against the guy with 5, even if your work is better."]
+                        ];
+                    @endphp
+                    @foreach ($problems as $problem)
+                        <div class="p-8 rounded-2xl bg-white border-b-4 border-red-100 hover:border-red-800 transition-all hover:-translate-y-1">
+                            <div class="text-red-800 mb-4">
+                                @if($problem['icon'] == 'timer')
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                @elseif($problem['icon'] == 'zap')
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                @elseif($problem['icon'] == 'bell')
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                                @else
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="19" cy="11" r="4"/></svg>
+                                @endif
+                            </div>
+                            <h3 class="text-lg font-bold mb-3">{{ $problem['title'] }}</h3>
+                            <p class="text-on-surface-variant text-sm leading-relaxed">{{ $problem['desc'] }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
+        <!-- Solution Section -->
+        <section id="features" class="bg-white py-24 px-6 overflow-hidden">
+            <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 items-center">
+                <div class="lg:w-1/2">
+                    <h2 class="text-4xl lg:text-5xl font-extrabold text-on-surface tracking-tight mb-8">
+                        One simple tool to fix <br/><span class="text-emerald-600 italic">both problems</span>
+                    </h2>
+                    <div class="space-y-6">
+                        @php
+                            $solutions = [
+                                ['title' => 'Send clean, professional quotes in minutes', 'desc' => 'Simple mobile interface built for the job site, not the office.'],
+                                ['title' => 'Mark jobs as complete in one click', 'desc' => 'Tells the system the work is done and triggers the automation.'],
+                                ['title' => 'Automatically send review requests', 'desc' => 'The software does the "awkward" asking for you via SMS or email.'],
+                                ['title' => 'Build your reputation without thinking', 'desc' => 'Watch your Google reviews climb while you work.']
+                            ];
+                        @endphp
+                        @foreach ($solutions as $sol)
+                            <div class="flex gap-4 items-start">
+                                <div class="w-10 h-10 rounded-full bg-[#dbe8e8] flex items-center justify-center shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00684e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold mb-1">{{ $sol['title'] }}</h4>
+                                    <p class="text-on-surface-variant">{{ $sol['desc'] }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="lg:w-1/2 grid grid-cols-2 gap-4">
+                    <div class="space-y-4 translate-y-8">
+                        <div class="bg-[#0b0f10] p-4 rounded-2xl shadow-xl border border-white/5">
+                            <img class="rounded-lg mb-4" src="{{ url('/') }}/images/mobile-img2.png" alt="App UI" referrerPolicy="no-referrer">
+                            <div class="h-2 w-1/2 bg-white/10 rounded mb-2"></div>
+                            <div class="h-2 w-3/4 bg-white/10 rounded"></div>
+                        </div>
+                        <div class="bg-emerald-700 p-6 rounded-2xl shadow-xl text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                            <p class="font-bold">WhatsApp Review Request</p>
+                            <p class="text-xs opacity-80">Sent on job completion.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-white p-6 rounded-2xl shadow-xl border border-slate-100">
+                            <div class="flex items-center gap-2 mb-4">
+                                <div class="w-8 h-8 rounded-full bg-slate-200"></div>
+                                <div class="h-3 w-20 bg-slate-100 rounded"></div>
+                            </div>
+                            <p class="text-sm font-bold text-slate-800">New Quote Sent!</p>
+                            <p class="text-xs text-slate-500 mb-4">Residential Fence Replacement - £2,450</p>
+                            <div class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-1 rounded w-fit uppercase">Pending Approval</div>
+                        </div>
+                        <div class="aspect-square bg-slate-200 rounded-2xl overflow-hidden relative group">
+                            <img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" src="{{ url('/') }}/images/fence-detail.png" alt="Fence detail" referrerPolicy="no-referrer">
+                            <div class="absolute inset-0 bg-emerald-100/5"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section id="how-it-works" class="py-24 px-6 bg-[#0b0f10] text-white">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-20">
+                    <h2 class="text-3xl lg:text-5xl font-extrabold tracking-tight mb-4">How It Works</h2>
+                    <p class="text-slate-400">Four simple steps to a more profitable business.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    @php
+                        $steps = [
+                            ['title' => 'Create and send your quote', 'desc' => 'Add materials, labor, and details in 60 seconds on your phone.'],
+                            ['title' => 'Complete the job', 'desc' => 'Do what you do best—build great fences. No app tracking needed here.'],
+                            ['title' => 'Tap "Request Review"', 'desc' => 'One tap in FlashQuote when you\'re packing up the tools.'],
+                            ['title' => 'Customer gets a message', 'desc' => 'They receive a simple link to leave a review while they\'re happy with the work.']
+                        ];
+                    @endphp
+                    @foreach ($steps as $index => $step)
+                        <div class="bg-white/5 border border-white/10 p-8 rounded-3xl relative overflow-hidden group">
+                            <div class="absolute -right-4 -top-4 text-white/5 font-black text-9xl">{{ $index + 1 }}</div>
+                            <div class="text-emerald-300 mb-6">
+                                @if($index == 0) <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                @elseif($index == 1) <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 22 1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l-3-3Z"/></svg>
+                                @elseif($index == 2) <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M2 12h2"/><path d="M20 12h2"/></svg>
+                                @else <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                @endif
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">{{ $step['title'] }}</h3>
+                            <p class="text-sm text-slate-400 leading-relaxed">{{ $step['desc'] }}</p>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="mt-16 text-center">
+                    <div onclick="scrollToForm()" class="inline-block px-10 py-4 bg-emerald-300 text-emerald-800 font-black text-2xl rounded-2xl transform -rotate-1 hover:rotate-0 transition-transform cursor-default">
+                        That’s it.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Outcome Section -->
+        <section class="py-24 px-6">
+            <div class="max-w-7xl mx-auto bg-white rounded-[3rem] p-8 lg:p-20 shadow-xl border border-slate-100 overflow-hidden relative">
+                <div class="absolute top-0 right-0 w-1/3 h-full bg-primary/5 -skew-x-12 translate-x-1/2"></div>
+                <div class="relative z-10">
+                    <h2 class="text-3xl lg:text-5xl font-extrabold text-on-surface mb-12 tracking-tight max-w-2xl">What this actually does for your business</h2>
+                    <div class="grid md:grid-cols-3 gap-12">
+                        @php
+                            $outcomes = [
+                                ['num' => '01', 'title' => 'More reviews → more trust', 'desc' => 'A profile full of 5-star reviews makes you the obvious choice for new enquiries.'],
+                                ['num' => '02', 'title' => 'More trust → more enquiries', 'desc' => 'Better online reputation means the phone rings more without spending on ads.'],
+                                ['num' => '03', 'title' => 'Faster quotes → more jobs won', 'desc' => 'Beat the competition by getting your professional quote in their inbox first.']
+                            ];
+                        @endphp
+                        @foreach ($outcomes as $outcome)
+                            <div class="space-y-4">
+                                <div class="text-6xl font-black text-emerald-100">{{ $outcome['num'] }}</div>
+                                <h4 class="text-xl font-bold">{{ $outcome['title'] }}</h4>
+                                <p class="text-on-surface-variant leading-relaxed">{{ $outcome['desc'] }}</p>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonial Section -->
+        <section class="py-24 px-6 bg-slate-100">
+            <div class="max-w-4xl mx-auto text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="rgba(0,104,78,0.1)" stroke="#00684e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-8"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>
+                <blockquote class="text-3xl lg:text-4xl font-extrabold text-on-surface leading-tight mb-10">
+                    “We used to forget to ask for reviews — now they just come in automatically.”
+                </blockquote>
+                <!--
+                <div class="flex flex-col items-center gap-4">
+                    <div class="w-16 h-16 rounded-full border-4 border-white shadow-lg overflow-hidden">
+                        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxnuB8N8jK9tJAv44YpZ0Yg6N5ezSxtiSa-IBw8zFAcGgnFz1q-b1dx-z88-8SH-X-cds3FAE9eymCIcrPfHX7PonwLVRStn-glCYw4RgvVgDdkTssQZOp0H-diS3oUouQpPdVHghqWNl_j1didaD2ZIY-u0JrTS9f2oSXJ7EEP4hJcsla_5KiKCgnjMnuh7HGQdKQ2Nlrd9G5O78vZqQy8NTLxmA62WELfc1Et1-zuW9M2P5Oc3YgsfHHd9iL82fVy55gkzEqMaO-" alt="Dave Henderson" referrerPolicy="no-referrer">
+                    </div>
+                    <div>
+                        <p class="font-bold text-on-surface">Dave Henderson</p>
+                        <p class="text-sm text-on-surface-variant font-label font-semibold">Owner, Henderson Fencing & Landscapes</p>
+                    </div>
+                </div> 
+                -->
             </div>
         </section>
 
@@ -186,7 +386,7 @@
                             Quoting fencing jobs shouldn't take all night
                         </h2>
                         <p class="text-lg text-slate-600 leading-relaxed">
-                            Speed wins fencing jobs. Most lads just don't have it. We built QuoteFlow to give you that edge without the late-night admin.
+                            Speed wins fencing jobs. Most lads just don't have it. We built FlashQuote to give you that edge without the late-night admin.
                         </p>
                         <div class="bg-emerald-50 border border-emerald-100 p-8 rounded-2xl">
                             <p class="text-emerald-800 font-semibold italic text-lg leading-relaxed">
@@ -350,15 +550,26 @@
         </section>
 
         <!-- Final CTA -->
-        <section class="py-32 bg-emerald-900 relative overflow-hidden">
-            <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#74f3c6 1px, transparent 1px); background-size: 30px 30px;"></div>
-            <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-                <h2 class="text-4xl md:text-6xl font-extrabold text-white mb-12 leading-tight">
-                    Try it. Break it. Tell me what's missing.
+        <section class="py-24 px-6 bg-[#00684e] text-white overflow-hidden relative">
+            <div class="absolute inset-0 opacity-10 pointer-events-none">
+                <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+            </div>
+            <div class="max-w-5xl mx-auto text-center relative z-10">
+                <h2 class="text-4xl lg:text-6xl font-extrabold mb-8 tracking-tighter">
+                    Get early access <br/><span class="text-[#74f3c6]">(free while we’re building)</span>
                 </h2>
-                <button onclick="scrollToForm()" class="bg-emerald-400 text-emerald-950 cursor-pointer px-12 py-6 rounded-full text-xl font-black shadow-2xl hover:bg-white transition-all active:scale-95">
-                    Get Started
-                </button>
+                <p class="text-xl text-[#74f3c6] max-w-2xl mx-auto mb-12 leading-relaxed">
+                    I’m working directly with a small number of fencing contractors to shape this. Join now and I’ll set everything up with you.
+                </p>
+                <div class="flex flex-col items-center gap-6">
+                    <button onclick="scrollToForm()" class="bg-[#74f3c6] text-[#00684e] px-12 py-5 rounded-2xl text-xl font-black shadow-2xl hover:scale-105 active:scale-95 transition-all">
+                        Get Started
+                    </button>
+                    <p class="flex items-center gap-2 text-sm text-white font-medium">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="lucide lucide-lock"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        No credit card required. Only 5 spots left.
+                    </p>
+                </div>
             </div>
         </section>
     </main>
@@ -371,9 +582,9 @@
                     <div class="w-6 h-6 bg-emerald-600 rounded flex items-center justify-center">
                         <svg class="text-white w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
                     </div>
-                    <span class="text-lg font-bold tracking-tight text-slate-900">QuoteFlow</span>
+                    <span class="text-lg font-bold tracking-tight text-slate-900">FlashQuote</span>
                 </div>
-                
+                <!--
                 <div class="flex flex-wrap justify-center gap-8">
                     <a href="#" class="text-sm font-medium text-slate-500 hover:text-emerald-600 transition-colors">Terms</a>
                     <a href="#" class="text-sm font-medium text-slate-500 hover:text-emerald-600 transition-colors">Privacy</a>
@@ -381,9 +592,10 @@
                     <a href="#" class="text-sm font-medium text-slate-500 hover:text-emerald-600 transition-colors">Twitter</a>
                     <a href="#" class="text-sm font-medium text-slate-500 hover:text-emerald-600 transition-colors">LinkedIn</a>
                 </div>
+                -->
                 
                 <p class="text-sm text-slate-400">
-                    © {{ date('Y') }} QuoteFlow. Built for Fencing Professionals.
+                    © {{ date('Y') }} FlashQuote. Built for Fencing Professionals.
                 </p>
             </div>
         </div>
@@ -391,6 +603,14 @@
     <script>
         function scrollToForm() {
             const el = document.getElementById('earlyAccessForm');
+            const navHeight = document.querySelector('nav').offsetHeight;
+            const top = el.getBoundingClientRect().top + window.pageYOffset - navHeight - 24;
+            window.scrollTo({ top, behavior: 'smooth' });
+        }
+
+        function scrollToHowItWorks(event) {
+            event.preventDefault();
+            const el = document.getElementById('how-it-works');
             const navHeight = document.querySelector('nav').offsetHeight;
             const top = el.getBoundingClientRect().top + window.pageYOffset - navHeight - 24;
             window.scrollTo({ top, behavior: 'smooth' });

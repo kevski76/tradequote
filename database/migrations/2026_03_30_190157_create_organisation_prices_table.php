@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('organisation_id')->constrained()->cascadeOnDelete()->default(0);
             $table->foreignId('module_item_id')->constrained()->cascadeOnDelete()->default(0);
-            $table->integer('cost_price')->default(0);
+            $table->integer('cost_price')->default(0); // in pence
             $table->string('pricing_type')->nullable(); // fixed | markup
             $table->decimal('markup_percent', 5, 2)->default(0);
-            $table->integer('sell_price')->default(0);
+            $table->integer('sell_price')->default(0); // in pence
             $table->timestamps();
         });
     }

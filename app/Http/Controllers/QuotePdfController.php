@@ -62,30 +62,51 @@ class QuotePdfController extends Controller
     {
         $stored = is_array($quote->calculation_data) ? $quote->calculation_data : [];
 
-        $length = (float) ($stored['length'] ?? $quote->length ?? 0);
-        $postsQty = (int) ($stored['posts_qty'] ?? 0);
-        $boardsQty = (int) ($stored['boards_qty'] ?? 0);
-        $postsPrice = (float) ($stored['posts_price'] ?? 0);
-        $boardsPrice = (float) ($stored['boards_price'] ?? 0);
-        $labourCost = (float) ($stored['labour_cost'] ?? $quote->labour_total ?? 0);
-        $materialsCost = (float) ($stored['materials_cost'] ?? $quote->materials_total ?? 0);
-        $subtotal = (float) ($stored['subtotal'] ?? $quote->subtotal_price ?? ($labourCost + $materialsCost));
-        $vatRate = (float) ($stored['vat_rate'] ?? $quote->vat_rate ?? 0);
-        $vatAmount = (float) ($stored['vat_amount'] ?? $quote->vat_total ?? 0);
-        $totalPrice = (float) ($stored['total_price'] ?? $quote->total_price ?? ($subtotal + $vatAmount));
+        // Support both the new canonical key names and legacy keys stored in old quotes.
+        $labourTotal        = (float) ($stored['labour_total'] ?? $stored['labour_cost'] ?? $quote->labour_total ?? 0);
+        $materialsWithWaste = (float) ($stored['materials_with_waste'] ?? $stored['materials_cost'] ?? $stored['materials_total'] ?? $quote->materials_total ?? 0);
+        $subtotalWithMarkup = (float) ($stored['subtotal_with_markup'] ?? $stored['subtotal'] ?? $quote->subtotal_price ?? ($labourTotal + $materialsWithWaste));
+        $vatRate            = (float) ($stored['vat_rate'] ?? $quote->vat_rate ?? 0);
+        $vat                = (float) ($stored['vat'] ?? $stored['vat_amount'] ?? $quote->vat_total ?? 0);
+        $total              = (float) ($stored['total'] ?? $stored['total_price'] ?? $quote->total_price ?? ($subtotalWithMarkup + $vat));
+
+        // Use stored items when available (new quotes); build legacy rows for old quotes
+        $items = [];
+        if (! empty($stored['items']) && is_array($stored['items'])) {
+            $items = $stored['items'];
+        } else {
+            // Backwards compat: reconstruct item rows from legacy flat keys
+            $postsQty    = (int) ($stored['posts_qty'] ?? 0);
+            $postsPrice  = (float) ($stored['posts_price'] ?? 0);
+            $boardsQty   = (int) ($stored['boards_qty'] ?? 0);
+            $boardsPrice = (float) ($stored['boards_price'] ?? 0);
+
+            if ($postsQty > 0) {
+                $items[] = ['name' => 'Fence Posts', 'type' => 'material', 'quantity' => $postsQty, 'unit_price' => 0.0, 'total' => $postsPrice];
+            }
+            if ($boardsQty > 0) {
+                $items[] = ['name' => 'Boards / Panels', 'type' => 'material', 'quantity' => $boardsQty, 'unit_price' => 0.0, 'total' => $boardsPrice];
+            }
+            if ($labourTotal > 0) {
+                $length  = (float) ($stored['length'] ?? $quote->length ?? 0);
+                $items[] = ['name' => 'Labour', 'type' => 'labour', 'quantity' => $length, 'unit_price' => 0.0, 'total' => $labourTotal];
+            }
+        }
 
         return [
-            'length' => $length,
-            'posts_qty' => $postsQty,
-            'posts_price' => $postsPrice,
-            'boards_qty' => $boardsQty,
-            'boards_price' => $boardsPrice,
-            'labour_cost' => $labourCost,
-            'materials_cost' => $materialsCost,
-            'subtotal' => $subtotal,
-            'vat_rate' => $vatRate,
-            'vat_amount' => $vatAmount,
-            'total_price' => $totalPrice,
+            'items'               => $items,
+            'length'              => (float) ($stored['length'] ?? $quote->length ?? 0),
+            'materials_with_waste' => $materialsWithWaste,
+            'labour_total'        => $labourTotal,
+            'subtotal_with_markup' => $subtotalWithMarkup,
+            'markup_amount'       => (float) ($stored['markup_amount'] ?? 0),
+            'waste_amount'        => (float) ($stored['waste_amount'] ?? 0),
+            'vat_rate'            => $vatRate,
+            'vat'                 => $vat,
+            'total'               => $total,
+            'markup'              => (float) ($stored['markup'] ?? 0),
+            'waste'               => (float) ($stored['waste'] ?? 0),
+            'labour_rate'         => (float) ($stored['labour_rate'] ?? 0),
         ];
     }
 

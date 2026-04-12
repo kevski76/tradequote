@@ -1,0 +1,22 @@
+$module = \App\Models\Modules::where('slug', 'fencing')->first();
+echo "Fencing Module:\n";
+echo json_encode(['id' => $module?->id, 'name' => $module?->name, 'slug' => $module?->slug], JSON_PRETTY_PRINT) . "\n";
+
+$items = $module ? \App\Models\ModuleItems::where('module_id', $module->id)->get() : collect();
+echo "\nFencing Module Items (" . $items->count() . "):\n";
+foreach ($items as $item) {
+    echo "- {$item->key} | {$item->name} | type={$item->type} | calc={$item->calculation} | optional={$item->is_optional}\n";
+}
+
+if ($module) {
+    $prices = \App\Models\OrganisationPrices::whereIn('module_item_id', $items->pluck('id'))->count();
+    echo "\nOrganisation Prices rows: $prices\n";
+    $pricesByItem = \App\Models\OrganisationPrices::whereIn('module_item_id', $items->pluck('id'))->get()->groupBy('module_item_id');
+    foreach ($items as $item) {
+        $count = $pricesByItem->get($item->id)?->count() ?? 0;
+        echo "  {$item->key}: $count prices\n";
+        foreach ($pricesByItem->get($item->id, []) as $price) {
+            echo "    - Org {$price->organisation_id}: £" . ($price->sell_price / 100) . "\n";
+        }
+    }
+}

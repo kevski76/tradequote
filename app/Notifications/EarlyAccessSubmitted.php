@@ -10,7 +10,7 @@ class EarlyAccessSubmitted extends Notification
 {
     use Queueable;
 
-    public function __construct(private readonly $data) {}
+    public function __construct(private readonly array $data) {}
 
     public function via(mixed $notifiable): array
     {

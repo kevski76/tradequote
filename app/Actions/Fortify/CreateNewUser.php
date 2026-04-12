@@ -29,9 +29,17 @@ class CreateNewUser implements CreatesNewUsers
             'city'          => ['nullable', 'string', 'max:100'],
             'postcode'      => ['nullable', 'string', 'max:20'],
             'phone'         => ['required', 'string', 'regex:/^[\+]?[\d\s\-\(\)\.]{7,20}$/'],
+            'google_review_url' => ['nullable', 'url', 'max:255'],
         ])->validate();
 
-        return DB::transaction(function () use ($input): User {
+        $global_defaults = config('quotes.form_defaults.global', []);
+        if (! empty($input['google_review_url'])) {
+            $global_defaults['google_review_url'] = $input['google_review_url'];
+        }
+        
+        $global_defaults['feedback_notification_email'] = $input['email'];
+
+        return DB::transaction(function () use ($input, $global_defaults): User {
             $user = User::create([
                 'name'     => $input['name'],
                 'email'    => $input['email'],
@@ -46,7 +54,7 @@ class CreateNewUser implements CreatesNewUsers
                 'postcode' => $input['postcode'] ?? null,
                 'phone'    => $input['phone'],
                 'quote_defaults' => [
-                    'global' => config('quotes.form_defaults.global', []),
+                    'global' => $global_defaults, 
                     'modules' => config('quotes.form_defaults.modules', []),
                 ],
             ]);

@@ -12,6 +12,14 @@ class Quotes extends Model
 {
     use HasFactory;
 
+    // Status constants
+    public const STATUS_DRAFT = 'draft';
+    public const STATUS_ACCEPTED = 'accepted';
+    public const STATUS_DECLINED = 'declined';
+    public const STATUS_WORK_COMPLETE = 'work_complete';
+
+    public static array $statuses = [self::STATUS_DRAFT, self::STATUS_ACCEPTED, self::STATUS_DECLINED, self::STATUS_WORK_COMPLETE];
+
     /**
      * Table name
      */
@@ -33,6 +41,7 @@ class Quotes extends Model
         'variant_key',
         'uuid',
         'customer_name',
+        'customer_phone',
         'job_name',
         'status',
         'length',
@@ -52,6 +61,7 @@ class Quotes extends Model
     protected $casts = [
         'length' => 'decimal:2',
         'vat_rate' => 'decimal:2',
+        'status' => 'string',
         'calculation_data' => 'array',
         'pdf_generated_at' => 'datetime',
     ];
@@ -64,5 +74,30 @@ class Quotes extends Model
     public function module(): BelongsTo
     {
         return $this->belongsTo(Modules::class, 'module_id');
+    }
+
+    /**
+     * Normalize status values for backward compatibility
+     * Maps 'rejected' → 'declined', validates against known statuses
+     */
+    public function normalizeStatus(string $status): string
+    {
+        $status = strtolower(trim($status));
+        
+        // Map legacy 'rejected' to 'declined'
+        if ($status === 'rejected') {
+            return self::STATUS_DECLINED;
+        }
+        
+        // Return status if valid, else default to draft
+        return in_array($status, self::$statuses, true) ? $status : self::STATUS_DRAFT;
+    }
+
+    /**
+     * Check if quote is in a final status (cannot be responded to further)
+     */
+    public function isFinalStatus(): bool
+    {
+        return in_array($this->status, [self::STATUS_ACCEPTED, self::STATUS_DECLINED, self::STATUS_WORK_COMPLETE], true);
     }
 }

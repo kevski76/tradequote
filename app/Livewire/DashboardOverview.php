@@ -43,7 +43,7 @@ class DashboardOverview extends Component
             ->where('created_at', '>=', now()->startOfWeek())
             ->count();
 
-        $totalValueQuoted = (clone $quotesQuery)->sum('total_price');
+        $totalValueQuoted = (clone $quotesQuery)->sum('total_price') / 100;
 
         $hasStatusColumn = Schema::hasColumn('quotes', 'status');
         $hasJobNameColumn = Schema::hasColumn('quotes', 'job_name');
@@ -51,7 +51,7 @@ class DashboardOverview extends Component
         $hasPdfPathColumn = Schema::hasColumn('quotes', 'pdf_path');
 
         $acceptedJobs = $hasStatusColumn
-            ? (clone $quotesQuery)->where('status', 'accepted')->count()
+            ? (clone $quotesQuery)->where('status', 'accepted')->orWhere('status', 'work_complete')->count()
             : 0;
 
         $recentQuotes = (clone $quotesQuery)
@@ -65,7 +65,7 @@ class DashboardOverview extends Component
 
         $recentQuoteRows = $recentQuotes->map(function ($quote) use ($hasStatusColumn, $hasJobNameColumn, $hasCustomerNameColumn, $hasPdfPathColumn, $organisationNames) {
             $status = $hasStatusColumn ? (string) ($quote->status ?? 'draft') : 'draft';
-            $status = in_array($status, ['draft', 'sent', 'accepted'], true) ? $status : 'draft';
+            $status = in_array($status, ['draft', 'sent', 'accepted', 'declined', 'work_complete'], true) ? $status : 'draft';
 
             $jobName = 'Quote #'.$quote->id;
 
@@ -87,7 +87,7 @@ class DashboardOverview extends Component
                 'id' => $quote->id,
                 'job_name' => $jobName,
                 'customer_name' => $customerName,
-                'total_price' => (int) $quote->total_price,
+                'total_price' => (float) $quote->total_price / 100,
                 'status' => $status,
                 'has_pdf_snapshot' => $hasPdfPathColumn ? ! empty($quote->pdf_path) : false,
                 'created_at' => $quote->created_at,

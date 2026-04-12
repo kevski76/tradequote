@@ -87,6 +87,20 @@
                 :placeholder="__('Business phone')"
             />
 
+            <!-- Google Business Review Link -->
+            <flux:field>
+                <flux:input
+                    name="google_review_url"
+                    :label="__('Google Review Url (optional)')"
+                    :value="old('google_review_url')"
+                    type="text"
+                    autofocus
+                    autocomplete="google_review_url"
+                    :placeholder="__('Google Review Url')"
+                />
+                <flux:description>Where can I find my Google Review URL? <a href="https://support.google.com/business/answer/16816815?hl=en-GB&ref_topic=4596755&sjid=6416344140756897958-EU" target="_blank" class="text-primary-600 hover:underline">{{ __('Click here') }}</a></flux:description>
+            </flux:field>
+
             <!-- Password -->
             <flux:input
                 name="password"
