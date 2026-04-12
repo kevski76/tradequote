@@ -13,6 +13,7 @@ use Dompdf\Dompdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 
 class FenceQuoteBuilder extends Component
@@ -206,7 +207,13 @@ class FenceQuoteBuilder extends Component
     public function saveQuote(): void
     {
         $this->customerPhone = $this->normalizeUkMobile($this->customerPhone);
-        $this->validate($this->rules());
+        try {
+            $this->validate($this->rules());
+        } catch (ValidationException $exception) {
+            $this->dispatch('quote-save-validation-failed');
+            throw $exception;
+        }
+
         $user      = auth()->user();
         $breakdown = $this->getBreakdown((int) ($user->organisation_id ?? 0));
 
@@ -215,6 +222,8 @@ class FenceQuoteBuilder extends Component
         $this->persistQuotePdf($quote, $pdfBytes);
 
         $this->dispatch('toast', message: 'Quote saved successfully. PDF snapshot attached.', type: 'success');
+        // redirect to the quote edit page to show the saved quote with the generated PDF and allow further edits
+        redirect()->route('quotes.edit', ['quote' => $quote->id]);
     }
 
     public function saveTemplate(): void

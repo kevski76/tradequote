@@ -34,8 +34,9 @@
                     </div>
                 @endif
                 <div class="w-full text-center">
+                    <h5 class="font-semibold text-lg">Had an issue?</h5>
                     <a href="{{ route('review.feedback', ['uuid' => $quote->uuid]) }}" class="text-center text-base text-zinc-800 hover:underline italic transition hover:text-zinc-700">
-                        Had an issue? Please let us know
+                        Please Click Here and let us know
                     </a>
                 </div>
 

@@ -3,6 +3,23 @@
         waOpen: false,
         waPhone: '+44',
         waMessage: '',
+        scrollToSaveError() {
+            this.$nextTick(() => {
+                const firstError = this.$root.querySelector('p.text-red-600');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return;
+                }
+
+                const topAnchor = this.$root.querySelector('#quote-form-top');
+                if (topAnchor) {
+                    topAnchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    return;
+                }
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        },
         openModal(phone, message) {  
             this.waPhone = phone;
             this.waMessage = message;
@@ -20,8 +37,9 @@
         }
     }"
     x-on:open-whatsapp-modal.window="openModal($wire.whatsappPhone, $wire.whatsappMessage)"
+    x-on:quote-save-validation-failed.window="scrollToSaveError()"
 >
-    <section class="space-y-2">
+    <section id="quote-form-top" class="space-y-2">
         <h1 class="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">Create Quote</h1>
     </section>
 
@@ -121,9 +139,9 @@
                         Include Gate(s)
                     </button>
 
-                    <div x-show="includeGate" x-transition class="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div x-show="includeGate" x-transition class="mt-3 grid grid-cols-2 gap-4">
                         @foreach($gates as $index => $gate)
-                            <div>
+                            <div class="col-span-2 md:col-span-1">
                                 <label class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Gate width (metres)</label>
                                 <input
                                     type="number"
@@ -133,7 +151,7 @@
                                     class="mt-2 w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
                                 >
                             </div>
-                            <div>
+                            <div class="col-span-2 md:col-span-1">
                                 <label class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Gate price (£)</label>
                                 <input
                                     type="number"
