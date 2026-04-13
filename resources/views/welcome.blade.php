@@ -42,8 +42,8 @@
                 <div class="flex justify-between items-center gap-4">
                     <div class="flex items-center gap-2">
                         <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up text-white w-5 h-5" aria-hidden="true">
-                                <path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="lucide lucide-trending-up text-white w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" />
                             </svg>
                         </div>
                         <a href="{{ url('/') }}">
@@ -52,7 +52,7 @@
                     </div>
                 
                     <div class="hidden md:flex gap-8 items-center">
-                        <a href="{{ url('/') }}/pricing" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">Pricing</a>
+                        <!--<a href="{{ url('/') }}/pricing" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">Pricing</a>-->
                     </div>
 
                     <div class="flex items-center gap-3">
@@ -83,7 +83,7 @@
                 <div id="welcome-mobile-menu" class="hidden md:hidden pt-4">
                     <div class="rounded-3xl border border-emerald-100 bg-white px-5 py-5 shadow-lg shadow-emerald-900/5">
                         <div class="flex flex-col gap-4">
-                            <a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors" data-mobile-nav-link>Pricing</a>
+                            <!--<a href="#" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors" data-mobile-nav-link>Pricing</a>-->
                         </div>
                         <button onclick="scrollToForm()" class="mt-5 w-full bg-linear-to-r cursor-pointer from-[#00684e] to-[#74f3c6] cursor-pointer text-white px-5 py-3 rounded-full text-sm font-bold shadow-lg shadow-emerald-900/10">
                             Get Early Access
@@ -353,7 +353,9 @@
         {{-- Footer --}}
         <footer class="bg-slate-50 py-8 px-8 border-t border-slate-200">
             <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-                <div class="text-lg font-bold text-emerald-900">FlashQuote</div>
+                <div class="flex items-center gap-2">
+                    <span class="text-lg font-bold tracking-tight text-slate-900">FlashQuote</span>
+                </div>
                 <div class="text-xs font-bold uppercase tracking-widest text-slate-400">
                     © {{ date('Y') }} FlashQuote. All rights reserved.
                 </div>
