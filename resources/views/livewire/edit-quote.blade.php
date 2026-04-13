@@ -37,18 +37,18 @@
         <div class="space-y-6 xl:col-span-7">
             <article class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-zinc-100 dark:bg-zinc-900 dark:ring-zinc-800">
                 <div class="grid grid-cols-3 gap-2 items-center">
-                    <div class="col-span-3 md:col-span-1">
-                        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Job Details</h2>
+                    <div class="col-span-3">
+                        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400 md:col-span-1">Job Details</h2>
                     </div>
-                    <div class="col-span-3 md:col-span-2">
-                        <div class="flex gap-1 rounded-lg border border-zinc-200 p-1 dark:border-zinc-700" x-data>
+                    <div class="col-span-3">
+                        <div class="grid grid-cols-2 md:grid-cols-auto md:flex md:gap-1 gap-3 md:rounded-lg md:border md:border-zinc-200 md:p-1 md:dark:border-zinc-700" x-data>
                             @foreach (\App\Models\Quotes::$statuses as $st)
                                 <button
                                     wire:click="toggleStatus('{{ $st }}')"
                                     @class([
-                                        'inline-flex rounded-md px-2.5 py-1 text-xs font-semibold transition',
+                                        'flex items-center justify-center rounded-lg md:rounded-md px-3 py-2.5 md:px-2.5 md:py-1 text-xs md:text-xs font-semibold transition whitespace-nowrap',
                                         'bg-indigo-600 text-white' => $status === $st,
-                                        'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100' => $status !== $st,
+                                        'border border-zinc-200 md:border-0 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:text-zinc-100 dark:border-zinc-700 md:dark:border-0 dark:hover:bg-zinc-800' => $status !== $st,
                                     ])
                                     type="button"
                                 >
