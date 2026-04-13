@@ -36,23 +36,27 @@
     <section class="grid grid-cols-1 gap-6 xl:grid-cols-12">
         <div class="space-y-6 xl:col-span-7">
             <article class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-zinc-100 dark:bg-zinc-900 dark:ring-zinc-800">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Job Details</h2>
-                    <div class="flex gap-1 rounded-lg border border-zinc-200 p-1 dark:border-zinc-700" x-data>
-                        @foreach (\App\Models\Quotes::$statuses as $st)
-                            <button
-                                wire:click="toggleStatus('{{ $st }}')"
-                                @class([
-                                    'inline-flex rounded-md px-2.5 py-1 text-xs font-semibold transition',
-                                    'bg-indigo-600 text-white' => $status === $st,
-                                    'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100' => $status !== $st,
-                                ])
-                                type="button"
-                            >
-                                {{ ucfirst(str_replace('_', ' ', $st)) }}
-                            </button>
-                        @endforeach
+                <div class="grid grid-cols-3 gap-2 items-center">
+                    <div class="col-span-3 md:col-span-1">
+                        <h2 class="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Job Details</h2>
                     </div>
+                    <div class="col-span-3 md:col-span-2">
+                        <div class="flex gap-1 rounded-lg border border-zinc-200 p-1 dark:border-zinc-700" x-data>
+                            @foreach (\App\Models\Quotes::$statuses as $st)
+                                <button
+                                    wire:click="toggleStatus('{{ $st }}')"
+                                    @class([
+                                        'inline-flex rounded-md px-2.5 py-1 text-xs font-semibold transition',
+                                        'bg-indigo-600 text-white' => $status === $st,
+                                        'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100' => $status !== $st,
+                                    ])
+                                    type="button"
+                                >
+                                    {{ ucfirst(str_replace('_', ' ', $st)) }}
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>                  
                 </div>
 
                 <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -147,10 +151,10 @@
                         Include gate
                     </button>
 
-                    <div x-show="includeGate" x-transition class="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div x-show="includeGate" x-transition class="mt-3 grid grid-cols-2 gap-4">
                         @if(count($gates) > 0)
                             @foreach($gates as $index => $gate)
-                                <div>
+                                <div class="col-span-2 md:col-span-1">
                                     <label class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Gate width (metres)</label>
                                     <input
                                         type="number"
@@ -160,7 +164,7 @@
                                         class="mt-2 w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
                                     >
                                 </div>
-                                <div>
+                                <div class="col-span-2 md:col-span-1">
                                     <label class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Gate price (£)</label>
                                     <input
                                         type="number"
