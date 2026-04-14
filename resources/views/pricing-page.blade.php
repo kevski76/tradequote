@@ -47,7 +47,7 @@
                             </svg>
                         </div>
                         <a href="{{ url('/') }}">
-                            <span class="text-xl font-bold tracking-tight text-slate-900">FlashQuote</span>
+                            <span class="text-xl font-bold tracking-tight text-slate-900">FlashQuote</span> <span class="text-xs font-thin text-slate-700">Beta</span>
                         </a>
                     </div>
                 
@@ -299,7 +299,7 @@
         <footer class="bg-slate-50 py-8 px-8 border-t border-slate-200">
             <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
                 <div class="flex items-center gap-2">
-                    <span class="text-lg font-bold tracking-tight text-slate-900">FlashQuote</span>
+                    <span class="text-lg font-bold tracking-tight text-slate-900">FlashQuote</span> <span class="text-xs font-thin text-slate-700">Beta</span>
                 </div>
                 <div class="text-xs font-bold uppercase tracking-widest text-slate-400">
                     © {{ date('Y') }} FlashQuote. All rights reserved.

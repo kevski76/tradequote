@@ -48,7 +48,7 @@
                         </svg>
                     </div>
                     <a href="{{ url('/') }}">
-                        <span class="text-xl font-bold tracking-tight text-slate-900">FlashQuote</span>
+                        <span class="text-xl font-bold tracking-tight text-slate-900">FlashQuote</span> <span class="text-xs font-thin text-slate-700">Beta</span>
                     </a>
                 </div>
             
@@ -581,7 +581,7 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-center gap-8">
                 <div class="flex items-center gap-2">
-                    <span class="text-lg font-bold tracking-tight text-slate-900">FlashQuote</span>
+                    <span class="text-lg font-bold tracking-tight text-slate-900">FlashQuote</span> <span class="text-xs font-thin text-slate-700">Beta</span>
                 </div>
                 <!--
                 <div class="flex flex-wrap justify-center gap-8">
