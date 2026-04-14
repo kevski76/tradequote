@@ -164,10 +164,26 @@
     <div x-data="{ 
             isIos: /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream,
             isStandalone: window.matchMedia('(display-mode: standalone)').matches,
-            showBanner: true 
+            deferredPrompt: null,
+            showBanner: false 
         }" 
+        x-init="
+            // 1. Listen for the Chrome/Android install event
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault(); // Stop the tiny default 'mini-infobar'
+                deferredPrompt = e; // Save the event for later
+                showBanner = true;  // Now show our custom banner
+            });
+
+            // 2. iOS doesn't have an event, so we just show the banner after a delay
+            if (isIos && !isStandalone) {
+                setTimeout(() => { showBanner = true; }, 2000);
+            }
+        "
         x-show="showBanner && !isStandalone" 
-        class="fixed bottom-0 left-0 right-0 p-4 bg-indigo-600 text-white z-50">
+        x-transition
+        class="fixed bottom-0 left-0 right-0 p-4 bg-emerald-600 text-white z-50 shadow-2xl"
+        style="display: none;">
         
         <div class="flex items-center justify-between max-w-lg mx-auto">
             <div class="flex-1 text-sm">
@@ -175,10 +191,28 @@
                     <p>To win jobs faster, tap <span class="font-bold">Share</span> then <span class="font-bold">'Add to Home Screen'</span>.</p>
                 </template>
                 <template x-if="!isIos">
-                    <p>Install FlashQuote to your home screen for instant access.</p>
+                    <div>
+                        <p class="font-semibold mb-1">Install FlashQuote</p>
+                        <p class="text-xs text-emerald-100">Access your quotes instantly from your home screen.</p>
+                    </div>
                 </template>
             </div>
-            <button @click="showBanner = false" class="ml-4 text-xs underline">Dismiss</button>
+
+            <div class="flex items-center gap-3">
+                <template x-if="!isIos && deferredPrompt">
+                    <button 
+                        @click="deferredPrompt.prompt(); deferredPrompt.userChoice.then(() => { showBanner = false; })"
+                        class="bg-white text-emerald-700 px-3 py-1.5 rounded-md text-xs font-bold shadow-sm">
+                        Install Now
+                    </button>
+                </template>
+                
+                <button @click="showBanner = false" class="text-white opacity-80 hover:opacity-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 </div>
