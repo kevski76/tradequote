@@ -161,4 +161,24 @@
             </div>
         </section>
     @endif 
+    <div x-data="{ 
+            isIos: /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream,
+            isStandalone: window.matchMedia('(display-mode: standalone)').matches,
+            showBanner: true 
+        }" 
+        x-show="showBanner && !isStandalone" 
+        class="fixed bottom-0 left-0 right-0 p-4 bg-indigo-600 text-white z-50">
+        
+        <div class="flex items-center justify-between max-w-lg mx-auto">
+            <div class="flex-1 text-sm">
+                <template x-if="isIos">
+                    <p>To win jobs faster, tap <span class="font-bold">Share</span> then <span class="font-bold">'Add to Home Screen'</span>.</p>
+                </template>
+                <template x-if="!isIos">
+                    <p>Install FlashQuote to your home screen for instant access.</p>
+                </template>
+            </div>
+            <button @click="showBanner = false" class="ml-4 text-xs underline">Dismiss</button>
+        </div>
+    </div>
 </div>
